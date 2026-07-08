@@ -51,6 +51,85 @@
             </div>
         </section>
 
+        <!-- Core Tech Stack -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200"><h2 class="font-bold text-slate-800">🚀 핵심 기술 스택 (Tech Stack)</h2></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+                <!-- Frontend -->
+                <div class="p-6">
+                    <h3 class="font-bold text-indigo-700 mb-4 flex items-center gap-2"><span>💻</span> Frontend Layer</h3>
+                    <ul class="space-y-3">
+                        <li class="flex flex-col"><span class="font-bold text-slate-800">React 19.2.7 + Vite</span><span class="text-xs text-slate-500">서버 컴포넌트 최적화 및 압도적 HMR 빌드 속도</span></li>
+                        <li class="flex flex-col"><span class="font-bold text-slate-800">Vanilla CSS Modules</span><span class="text-xs text-slate-500">순수 CSS 문법 활용 및 클래스 충돌 방지</span></li>
+                        <li class="flex flex-col"><span class="font-bold text-slate-800">Zustand & React Query</span><span class="text-xs text-slate-500">가벼운 전역 상태 관리 및 비동기 서버 캐싱</span></li>
+                    </ul>
+                </div>
+                <!-- Backend -->
+                <div class="p-6 bg-slate-50/50">
+                    <h3 class="font-bold text-emerald-700 mb-4 flex items-center gap-2"><span>⚙️</span> Backend Layer</h3>
+                    <ul class="space-y-3">
+                        <li class="flex flex-col"><span class="font-bold text-slate-800">Spring Boot 4.1 + Java 25</span><span class="text-xs text-slate-500">최신 프레임워크 및 언어 스펙 도입</span></li>
+                        <li class="flex flex-col"><span class="font-bold text-slate-800">Virtual Threads (가상 스레드)</span><span class="text-xs text-slate-500">비동기 AI API 대기 중 블로킹 최소화 (핵심)</span></li>
+                        <li class="flex flex-col"><span class="font-bold text-slate-800">Spring Security + JWT</span><span class="text-xs text-slate-500">무상태(Stateless) 토큰 기반 인증 체계</span></li>
+                    </ul>
+                </div>
+                <!-- Data / DB -->
+                <div class="p-6">
+                    <h3 class="font-bold text-orange-700 mb-4 flex items-center gap-2"><span>🗄️</span> Data Layer (JPA 최적화)</h3>
+                    <ul class="space-y-3">
+                        <li class="flex flex-col"><span class="font-bold text-slate-800">Spring Data JPA (최종 권장)</span><span class="text-xs text-slate-500">도메인 객체 지향 및 CRUD 생산성 최상. (복잡한 공간 쿼리 필요시 MyBatis/Native 보조)</span></li>
+                        <li class="flex flex-col"><span class="font-bold text-slate-800">PostgreSQL</span><span class="text-xs text-slate-500">JSONB(알레르기 배열) 및 PostGIS 특화 메인 DB</span></li>
+                        <li class="flex flex-col"><span class="font-bold text-slate-800">Redis</span><span class="text-xs text-slate-500">점주용 5분 만료 동적 QR 토큰 및 세션 저장소</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Directory Structure -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200"><h2 class="font-bold text-slate-800">📂 프로젝트 폴더 및 패키지 구조</h2></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+                <div class="p-6">
+                    <h3 class="font-bold text-indigo-700 mb-3 text-sm">Frontend: FSD (Feature-Sliced Design)</h3>
+                    <pre class="bg-slate-800 text-slate-300 text-xs p-4 rounded-lg overflow-auto font-mono leading-relaxed">
+src/
+ ├── app/             # 전역 라우터, 글로벌 스타일, 프로바이더
+ ├── assets/          # 로고 이미지, 폰트, 공통 CSS
+ ├── features/        # 도메인 중심 핵심 기능 모듈
+ │    ├── auth/       # 프로필 설정, 21종 알레르기 온보딩
+ │    ├── scanner/    # AI 렌즈 뷰, 상태 관리(Zustand)
+ │    ├── order/      # 점주용 웹 오더 뷰어 (QR)
+ │    ├── tour/       # 식당 지도, 리뷰 필터
+ │    ├── cs/         # 게시판, FAQ, 1:1 문의, 개인정보
+ │    └── admin/      # 관리자용 통계 모니터링 대시보드
+ ├── shared/          # 공통 컴포넌트(Button), API 클라이언트
+ └── App.jsx
+                    </pre>
+                </div>
+                <div class="p-6 bg-slate-50/50">
+                    <h3 class="font-bold text-emerald-700 mb-3 text-sm">Backend: Layered Multi-Module</h3>
+                    <pre class="bg-slate-800 text-slate-300 text-xs p-4 rounded-lg overflow-auto font-mono leading-relaxed">
+okeymeal-backend/
+ ├── okeymeal-core/          # 의존성 없음, 핵심 도메인 로직
+ │    ├── domain/            # user, tour, ai, order, cs 등
+ │    └── global/            # 예외 처리, 보안(JWT)
+ │
+ ├── okeymeal-external/      # 외부 API 전용 클라이언트
+ │    ├── ai/                # Naver OCR, HyperCLOVA X
+ │    └── tour/              # 한국관광공사 TourAPI 연동
+ │
+ ├── okeymeal-api/           # 관광객(B2C) 및 점주(B2B) API
+ │    ├── controller/        # REST Endpoint
+ │    └── dto/               # Request/Response 객체
+ │
+ └── okeymeal-admin/         # 관리자(B2A) API 및 스케줄러
+      ├── stats/             # 일간/주간 통계 집계 배치
+      └── controller/        # 관리자 대시보드 데이터 연동
+                    </pre>
+                </div>
+            </div>
+        </section>
+
         <!-- System Architecture Diagram -->
         <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
@@ -65,39 +144,60 @@
                 <div class="mermaid origin-top transition-transform duration-200" id="sys-diagram">
                     graph TD
                         subgraph Clients["Client Layer"]
-                            App["관광객용 App (Flutter)"]
-                            Web["점주용 Web (React)"]
+                            App["관광객용 App (B2C)"]
+                            Web["점주용 Web (B2B)"]
+                            AdminWeb["관리자 Web (B2A)"]
                         end
                         Gateway["API Gateway (AWS)"]
-                        subgraph Backend["Backend Layer (Spring Boot)"]
-                            AuthSvc["Auth Svc"]
-                            TourSvc["Tour Svc"]
-                            AISvc["AI Svc"]
-                            OrderSvc["Order Svc"]
+                        
+                        subgraph Backend["Backend Layer (Multi-Module)"]
+                            subgraph API["okeymeal-api / okeymeal-admin"]
+                                AuthSvc["Auth Svc"]
+                                TourSvc["Tour Svc"]
+                                AISvc["AI Svc"]
+                                OrderSvc["Order Svc"]
+                                CSSvc["CS Svc"]
+                                AdminSvc["Admin Svc"]
+                            end
+                            subgraph Core["okeymeal-core"]
+                                DB[(PostgreSQL)]
+                                Cache[(Redis)]
+                            end
+                            subgraph External["okeymeal-external"]
+                                ExtClient["API Clients"]
+                            end
                         end
-                        subgraph Data["Data Layer"]
-                            DB[(PostgreSQL)]
-                            Cache[(Redis)]
-                        end
-                        subgraph External["External APIs"]
+                        
+                        subgraph Outside["External APIs"]
                             TourAPI["한국관광공사"]
                             FoodAPI["식약처"]
-                            AI["Naver Clova & HyperCLOVA"]
+                            AI["Naver AI"]
+                            FCM["Firebase FCM"]
                         end
 
                         App --> Gateway
                         Web --> Gateway
+                        AdminWeb --> Gateway
+                        
                         Gateway --> AuthSvc
                         Gateway --> TourSvc
                         Gateway --> AISvc
                         Gateway --> OrderSvc
+                        Gateway --> CSSvc
+                        Gateway --> AdminSvc
                         
-                        AuthSvc --> DB
-                        OrderSvc --> DB
-                        OrderSvc --> Cache
-                        TourSvc -.-> TourAPI
-                        AISvc -.-> FoodAPI
-                        AISvc -.-> AI
+                        AuthSvc --> Core
+                        OrderSvc --> Core
+                        CSSvc --> Core
+                        AdminSvc --> Core
+                        AISvc --> Core
+                        TourSvc --> Core
+                        
+                        AISvc --> External
+                        TourSvc --> External
+                        AdminSvc --> External
+                        
+                        External -.-> Outside
                 </div>
             </div>
         </section>

@@ -1,133 +1,186 @@
 ---
 title: 서비스 구조도 (Architecture)
-version: v1.0.0
+version: v2.0.0
 last_updated: 2026-07-08
 author: 숭늉
-status: Draft
+status: Final
 ---
 
-# 🏗️ 서비스 구조도 (Architecture)
+# 🏗️ OkeyMeal 서비스 구조도 (Architecture)
 
-본 문서는 OkeyMeal 프로젝트의 전체적인 시스템 구성, 핵심 기술 스택, 데이터 흐름, 그리고 AI 렌즈 기능 구현을 위한 API 조합 대안 분석을 명세합니다.
+본 문서는 OkeyMeal 프로젝트의 프론트엔드 및 백엔드의 계층 구조, 패키지/폴더 명세, 그리고 AI API 연동 전략을 상세히 정의합니다.
 
 ---
 
-## 1. 시스템 구성도 (System Architecture)
+## 1. 핵심 기술 스택 (Core Tech Stack)
 
+**[프론트엔드]**
+*   **프레임워크**: React 19.2.7 + Vite
+*   **상태 관리**: Zustand (전역 클라이언트 상태), React Query (서버 상태 캐싱)
+*   **스타일링**: Vanilla CSS Modules
+
+**[백엔드]**
+*   **프레임워크**: Spring Boot 4.1.0 + OpenJDK 25
+*   **데이터베이스**: PostgreSQL (JSONB, PostGIS 연동) + Redis (세션/QR 캐싱)
+*   **ORM**: Spring Data JPA
+*   **비동기 처리**: Virtual Threads (AI API 통신 대기 병목 해결)
+
+---
+
+## 2. 프로젝트 폴더 및 패키지 구조 (Directory Structure)
+
+### 2.1. 프론트엔드: FSD (Feature-Sliced Design) 아키텍처
+기능(도메인) 중심으로 UI, 비즈니스 로직, 상태를 응집하여 관리합니다. B2C(관광객), B2B(점주), B2A(관리자) 뷰를 모듈화합니다.
+
+```text
+src/
+ ├── app/             # 전역 라우터(React Router), 프로바이더(QueryClient), 글로벌 스타일
+ ├── assets/          # 공통 폰트, 로고 이미지, 글로벌 CSS
+ ├── features/        # 도메인 중심의 핵심 기능 모듈 모음
+ │    ├── auth/       # 프로필 설정, 21종 알레르기 온보딩 (컴포넌트, 상태, 훅)
+ │    ├── scanner/    # AI 렌즈 카메라 뷰, OCR 결과 상태 관리 (Zustand)
+ │    ├── order/      # 점주용 스마트 오더 뷰어 및 QR 스캔 처리
+ │    ├── tour/       # 무장애 식당 지도 뷰, 리뷰 필터링 로직
+ │    ├── cs/         # [신규] 게시판, FAQ, 1:1 문의, 개인정보 동의 UI
+ │    └── admin/      # [신규] 관리자용 통계 대시보드 및 회원 관리 패널
+ ├── shared/          # 공통 컴포넌트(Button, Modal), 암호화 유틸, API 클라이언트(Axios)
+ └── App.jsx          # 루트 컴포넌트
+```
+
+### 2.2. 백엔드: 계층형 멀티 모듈 (Layered Multi-Module) 아키텍처
+마이크로서비스(MSA) 전환이 용이하고 모듈 간 결합도를 낮추기 위해 Gradle Multi-Module 방식을 채택합니다.
+
+```text
+okeymeal-backend/
+ ├── okeymeal-core/          # [의존성 없음] 핵심 비즈니스 로직 및 인프라
+ │    ├── domain/            # user, tour, ai, order, cs 등 도메인별 JPA Entity 및 Repository
+ │    └── global/            # 공통 예외 처리, 보안(Security/JWT), 공통 유틸리티
+ │
+ ├── okeymeal-external/      # [의존성: core] 외부 API 통신 전용 클라이언트
+ │    ├── ai/                # Spring AI 기반 HyperCLOVA X 및 Clova OCR 연동 모듈
+ │    └── tour/              # 한국관광공사 TourAPI, Google Places API 연동 모듈
+ │
+ ├── okeymeal-api/           # [의존성: core, external] 관광객(B2C) 및 점주(B2B)용 REST API
+ │    ├── controller/        # 프론트엔드 앱과 통신하는 엔드포인트
+ │    └── dto/               # API 요청/응답 객체 매핑
+ │
+ └── okeymeal-admin/         # [의존성: core] 관리자(B2A) 전용 API 및 배치 처리
+      ├── stats/             # 일간 스캔량, QR 발급량, 주문 트렌드 집계 스케줄러
+      └── controller/        # 관리자 대시보드용 데이터 제공 엔드포인트
+```
+
+---
+
+## 3. ORM 및 DB 최적화 전략 (JPA vs MyBatis)
+
+OkeyMeal은 빠르고 안전한 도메인 확장을 위해 **Spring Data JPA를 메인 ORM으로 채택**했습니다.
+
+*   **JPA 도입 사유**: OkeyMeal은 레거시 DB가 없는 신규 프로젝트이며, `User`, `Review`, `Post`, `Inquiry` 등 엔티티 간의 연관관계가 명확합니다. 객체 지향적인 설계와 CRUD 생산성이 압도적으로 높아 스타트업 및 해커톤 환경에 최적화되어 있습니다.
+*   **보완 전략 (QueryDSL/Native Query)**: 
+    *   반경 5km 식당 조회를 위한 **PostGIS 공간 연산 쿼리** 등 복잡도가 높은 로직은 Native Query를 활용합니다.
+    *   관리자 모듈의 **대용량 조인 및 통계 분석(FEAT-ADMIN-02)** 은 QueryDSL을 활용해 Type-Safe하고 최적화된 쿼리를 구성합니다.
+
+---
+
+## 4. AI API 통신 대안 비교 및 확정
+
+*   **1안 (Google Vision + Gemini)**: 가격이 저렴하고 희귀 언어 번역에 강하나, K-Food의 핵심인 **'노포 식당의 세로쓰기/손글씨 메뉴판'** 인식률에서 치명적인 오독 리스크가 존재.
+*   **2안 (Naver Clova OCR + HyperCLOVA X)**: 비용이 다소 높으나, **압도적인 한글 OCR 성능**과 한국 식문화 뉘앙스 파악 능력을 지님. 심사위원 시연 시 오류를 최소화하기 위해 **2안을 최종 채택**.
+
+---
+
+## 5. 데이터 흐름 요약 (Data Flow)
+
+1. **관광객 AI 렌즈 구동**: React 카메라 뷰 -> 이미지 압축 -> `okeymeal-api` 서버로 전송.
+2. **비동기 AI 연동**: API 서버는 Virtual Threads를 사용하여 블로킹 없이 `okeymeal-external`의 Naver OCR / LLM 연동 모듈을 호출.
+3. **위험 성분 분석**: 추출된 한글 메뉴명을 사용자의 알레르기 DB(JPA)와 대조하여 위험 성분 필터링 및 번역.
+4. **결과 반환 및 렌더링**: 프론트엔드에 JSON 반환, React에서 위험 메뉴 붉은색 AR 오버레이 렌더링.
+5. **통계 적재 (Admin)**: 비동기 이벤트 리스너를 통해 해당 스캔 이력을 `okeymeal-admin` 통계 DB로 적재하여 추후 AI 파인튜닝 자료로 활용.
+
+---
+
+## 6. 시각화 다이어그램 (Diagrams)
+
+### 6.1. 시스템 구성도 (System Architecture)
 ```mermaid
 graph TD
-    %% Clients
     subgraph Clients["Client Layer"]
-        App["관광객용 App\n(Flutter)"]
-        Web["점주용 Web\n(React/Vue)"]
+        App["관광객용 App (B2C)"]
+        Web["점주용 Web (B2B)"]
+        AdminWeb["관리자 Web (B2A)"]
+    end
+    Gateway["API Gateway (AWS)"]
+    
+    subgraph Backend["Backend Layer (Multi-Module)"]
+        subgraph API["okeymeal-api / okeymeal-admin"]
+            AuthSvc["Auth Svc"]
+            TourSvc["Tour Svc"]
+            AISvc["AI Svc"]
+            OrderSvc["Order Svc"]
+            CSSvc["CS Svc"]
+            AdminSvc["Admin Svc"]
+        end
+        subgraph Core["okeymeal-core"]
+            DB[(PostgreSQL)]
+            Cache[(Redis)]
+        end
+        subgraph External["okeymeal-external"]
+            ExtClient["API Clients"]
+        end
+    end
+    
+    subgraph Outside["External APIs"]
+        TourAPI["한국관광공사"]
+        FoodAPI["식약처"]
+        AI["Naver AI"]
+        FCM["Firebase FCM"]
     end
 
-    %% API Gateway & Load Balancer
-    Gateway["API Gateway\n(AWS API Gateway)"]
-
-    %% Backend Services
-    subgraph Backend["Backend Layer (Spring Boot)"]
-        AuthSvc["Auth Service\n(사용자/세션 관리)"]
-        TourSvc["Tour Service\n(식당/산책로 추천)"]
-        AISvc["AI Service\n(OCR/번역/성분분석)"]
-        OrderSvc["Order Service\n(QR 생성 및 상태 관리)"]
-    end
-
-    %% Database
-    subgraph Data["Data Layer"]
-        DB[(PostgreSQL\nUser & Order Data)]
-        Cache[(Redis\nQR Token/Session)]
-    end
-
-    %% External APIs
-    subgraph External["External APIs"]
-        TourAPI["한국관광공사 TourAPI"]
-        FoodAPI["식약처 영양/알레르기 API"]
-        AI_Vision["Cloud Vision API (OCR)"]
-        AI_LLM["LLM API (번역/성분추론)"]
-    end
-
-    %% Connections
-    App -->|REST/HTTPS| Gateway
-    Web -->|REST/HTTPS| Gateway
+    App --> Gateway
+    Web --> Gateway
+    AdminWeb --> Gateway
+    
     Gateway --> AuthSvc
     Gateway --> TourSvc
     Gateway --> AISvc
     Gateway --> OrderSvc
-
-    AuthSvc --> DB
-    OrderSvc --> DB
-    OrderSvc --> Cache
-
-    TourSvc -->|연동| TourAPI
-    AISvc -->|연동| FoodAPI
-    AISvc -->|이미지 전송| AI_Vision
-    AISvc -->|텍스트/프롬프트| AI_LLM
+    Gateway --> CSSvc
+    Gateway --> AdminSvc
+    
+    AuthSvc --> Core
+    OrderSvc --> Core
+    CSSvc --> Core
+    AdminSvc --> Core
+    AISvc --> Core
+    TourSvc --> Core
+    
+    AISvc --> External
+    TourSvc --> External
+    AdminSvc --> External
+    
+    External -.-> Outside
 ```
 
----
-
-## 2. AI 메뉴 스캐너: 핵심 API 조합 대안 비교 분석
-
-사용자가 촬영한 메뉴판 이미지에서 텍스트를 추출하고(OCR), 이를 번역한 뒤, 위험 성분을 추론하는 핵심 로직을 구현하기 위해 두 가지 API 조합 안을 비교 분석합니다.
-
-### 💡 1안: Google 생태계 조합 (Google Cloud Vision + Gemini)
-가장 보편적이고 글로벌 호환성이 높은 조합입니다.
-
-*   **장점 (Pros)**
-    *   **강력한 다국어 번역**: 유럽, 동남아 등 희귀 언어권 사용자의 자국어 번역 품질이 압도적으로 우수.
-    *   **비용 효율성**: 대규모 트래픽 발생 시 API 호출 비용이 상대적으로 저렴함.
-    *   **인프라 일관성**: 해외 사용자가 접근할 때 글로벌 엣지(Edge) 네트워크가 잘 구축되어 있어 응답 지연(Latency)이 적음.
-*   **단점 (Cons)**
-    *   한국 로컬 노포 식당 특유의 **궁서체, 휘갈겨 쓴 손글씨 메뉴판**, 세로 쓰기 메뉴판 등에 대한 한글 OCR 인식률이 네이버 대비 약간 떨어질 수 있음.
-    *   한국 로컬 식재료(예: "취나물", "고사리", "다시다")에 대한 깊은 맥락적 이해가 부족할 때가 있음.
-
-### 💡 2안: Naver 생태계 조합 (Naver Clova OCR + HyperCLOVA X)
-한국의 로컬 환경과 데이터에 가장 특화된 조합입니다.
-
-*   **장점 (Pros)**
-    *   **압도적인 한글 OCR 성능**: 오래된 식당의 손글씨, 세로 간판, 빛 반사가 심한 비닐 코팅 메뉴판 등 악조건 속에서도 한글을 정확하게 추출함.
-    *   **로컬 식문화(K-Food) 이해도 최상**: HyperCLOVA X는 "김치찌개에 돼지고기가 기본으로 들어간다"거나 "쌈장에 견과류가 들어갈 수 있다"는 한국 식문화의 숨겨진 맥락을 깊이 이해하여 더 정확한 알레르기 경고가 가능함.
-*   **단점 (Cons)**
-    *   Google 대비 비용(Cost)이 높게 책정될 수 있음.
-    *   영어/일어/중국어 등 메이저 언어 외의 소수 언어 번역 퀄리티 및 레이턴시가 Google보다 불리할 수 있음.
-
-> **📌 최종 제안 (결론)**
-> 초기 타겟 시장이 "한국에 방문하는 모든 외국인"이라면 1안(Google)이 무난하나, 과제 5번의 심사위원이 **"한글 메뉴판 인식의 정확도"**와 **"안전성(한국 음식 성분 파악의 치밀함)"**을 중점적으로 볼 것을 고려하면, 공모전 출품작 수준에서는 비용을 감수하더라도 **2안(Naver 조합)**을 채택하여 OCR 인식률 실패로 인한 시연(Demo) 실패 리스크를 없애는 것을 권장합니다.
-
----
-
-## 3. 데이터 흐름도 (Data Flow Diagram - AI 스캐너 및 QR 오더)
-
+### 6.2. 데이터 흐름도 (Data Flow)
 ```mermaid
 sequenceDiagram
-    autonumber
-    actor Tourist as 관광객 (App)
-    participant AISvc as AI Service (Backend)
-    participant NaverAPI as Naver Clova & HyperCLOVA
-    participant DB as 식약처/DB
-    actor Owner as 점주 (Web)
+    actor Tourist as 관광객(App)
+    participant AISvc as AI Service
+    participant NaverAPI as Naver Clova API
+    actor Owner as 점주(Web)
 
-    Tourist->>AISvc: 1. 메뉴판 사진 및 사용자 프로필(땅콩 알레르기) 전송
-    AISvc->>NaverAPI: 2. 이미지 OCR 요청 (Clova)
-    NaverAPI-->>AISvc: 3. 한글 텍스트(예: "우도 땅콩 아이스크림") 반환
-    AISvc->>NaverAPI: 4. 텍스트 번역 및 성분 추론 요청 (HyperCLOVA X)
-    NaverAPI-->>AISvc: 5. 번역 결과 및 위험 성분(땅콩) 검출 결과 반환
-    AISvc->>DB: 6. 식약처 API 교차 검증
-    AISvc-->>Tourist: 7. 위험 메뉴 빨간색 블러 처리 및 경고 UI 렌더링
+    Tourist->>AISvc: 메뉴판 사진 + 사용자 알레르기 전송
+    AISvc->>NaverAPI: 이미지 OCR 요청
+    NaverAPI-->>AISvc: 한글 텍스트 추출 반환
+    AISvc->>NaverAPI: 번역 및 위험 성분 추론 요청
+    NaverAPI-->>AISvc: 위험 성분(땅콩) 검출 반환
+    AISvc-->>Tourist: 위험 메뉴 적색 경고 렌더링
     
-    Tourist->>AISvc: 8. 안전한 메뉴 1개 선택 및 QR 코드 생성 요청
-    AISvc-->>Tourist: 9. 동적 서명(HMAC)이 포함된 QR 코드 발급
+    Tourist->>AISvc: 안전 메뉴 주문 및 QR 생성
+    AISvc-->>Tourist: HMAC 서명된 QR 코드 발급
     
-    Tourist->>Owner: 10. 점주에게 스마트폰 QR 코드 제시
-    Owner->>AISvc: 11. 점주 스마트폰 카메라로 QR 스캔 (URL 접속)
-    AISvc->>AISvc: 12. 서명(Token) 유효성 및 만료 시간 검증
-    AISvc-->>Owner: 13. [인증 완료] 한국어 주문 내역 & 주의사항 웹 뷰 렌더링
+    Tourist->>Owner: 점주에게 QR 코드 제시
+    Owner->>AISvc: QR 스캔 (URL 접속)
+    AISvc->>AISvc: 서명(Token) 유효성 검증
+    AISvc-->>Owner: 번역된 주문서 웹뷰 렌더링 (안심 뱃지 표기)
 ```
-
----
-
-## 📝 변경 이력
-| 버전 | 날짜 | 변경 내용 | 작성자 |
-|---|---|---|---|
-| v1.0.0 | 2026-07-08 | 서비스 구조도 최초 작성 (API 조합 대안 비교 분석 추가) | 숭늉 |
