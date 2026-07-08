@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Analysis Dashboard - OkeyMeal</title>
+    <!-- Tailwind CSS -->
+    <script src="../../../assets/js/tailwindcss.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0d9488', // teal-600
+                        secondary: '#f0fdfa', // teal-50
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; }
+    </style>
+</head>
+<body class="text-slate-800">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-10">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl">OK</div>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-800">OkeyMeal</h1>
+                    <p class="text-xs text-slate-500">2026 관광데이터 공모전 과제 분석서</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="inline-block bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full font-semibold">v1.1.0</span>
+                <p class="text-xs text-slate-500 mt-1">Updated: 2026-07-08</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-6 py-8 space-y-8">
+        
+        <!-- KPI Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white rounded-lg p-6 shadow-md border-t-4 border-primary hover:shadow-lg transition-shadow">
+                <h3 class="text-sm font-semibold text-slate-500 mb-1">선정 과제</h3>
+                <p class="text-2xl font-bold text-slate-800">지정과제 5번</p>
+                <p class="text-sm text-slate-600 mt-2">만성질환자 외식 불안감 해소</p>
+            </div>
+            <div class="bg-white rounded-lg p-6 shadow-md border-t-4 border-blue-500 hover:shadow-lg transition-shadow">
+                <h3 class="text-sm font-semibold text-slate-500 mb-1">핵심 타겟</h3>
+                <p class="text-2xl font-bold text-slate-800">식이 제한 관광객</p>
+                <p class="text-sm text-slate-600 mt-2">만성질환, 알레르기, 비건 등</p>
+            </div>
+            <div class="bg-white rounded-lg p-6 shadow-md border-t-4 border-orange-500 hover:shadow-lg transition-shadow">
+                <h3 class="text-sm font-semibold text-slate-500 mb-1">핵심 연계 데이터</h3>
+                <p class="text-2xl font-bold text-slate-800">TourAPI + 식약처</p>
+                <p class="text-sm text-slate-600 mt-2">안심 식당 탐색 & 산책 코스</p>
+            </div>
+        </section>
+
+        <!-- 공모전 요강 분석 -->
+        <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="text-primary">📌</span> 공모전 핵심 요강 (Constraints)
+                </h2>
+            </div>
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold text-slate-700 mb-3">일정 및 자격</h3>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li><span class="font-medium text-slate-800">부문:</span> ②-2 웹·앱 구현 부문</li>
+                        <li><span class="font-medium text-slate-800">접수기간:</span> 2026. 7. 6. ~ 7. 21. 16:00</li>
+                        <li><span class="font-medium text-slate-800">서비스 개발:</span> 7월 말 ~ 9월</li>
+                        <li><span class="font-medium text-slate-800">1차 기능심사:</span> 10월 중</li>
+                        <li><span class="font-medium text-slate-800">최종 PT심사:</span> 10월 중</li>
+                        <li><span class="font-medium text-slate-800">시상식:</span> 11월 중</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-slate-700 mb-3">심사 기준 (1차 기능 심사)</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1"><span class="font-medium">기획력 & 구현성</span><span>60점</span></div>
+                            <div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-blue-500 h-2 rounded-full" style="width: 60%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1"><span class="font-medium text-primary">데이터 활용 적절성 (TourAPI 필수)</span><span class="font-bold text-primary">20점</span></div>
+                            <div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-primary h-2 rounded-full" style="width: 20%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1"><span class="font-medium">서비스 발전성</span><span>20점</span></div>
+                            <div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-orange-500 h-2 rounded-full" style="width: 20%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 지정과제 전체 리뷰 -->
+        <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="text-primary">🔍</span> 지정과제 리뷰 및 선정 이유
+                </h2>
+            </div>
+            <div class="p-6 space-y-6">
+                <div>
+                    <h3 class="font-semibold text-slate-700 mb-2">과제 트렌드 분석</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">총 10개의 과제는 <strong>B2C(관광객 편의 증대)</strong>와 <strong>B2B/B2G(실무 효율화)</strong>로 나뉩니다. 실시간 문맥 대응과 생성형 AI를 활용한 문제 해결이 핵심 트렌드로 요구됩니다.</p>
+                </div>
+                
+                <div class="bg-secondary p-5 rounded-md border border-teal-100">
+                    <h3 class="font-semibold text-teal-800 mb-3">오키밀 - 과제 5번 선정 이유</h3>
+                    <ul class="space-y-3 text-sm text-slate-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-600 mt-0.5 font-bold">✔️</span>
+                            <span><strong>비전 일치:</strong> 외국인 관광객의 식이 제약과 언어 장벽 해소라는 목표가 만성질환자의 외식 불안감 해소 과제와 완벽히 부합합니다.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-600 mt-0.5 font-bold">✔️</span>
+                            <span><strong>기술 차별성:</strong> 단순 식당 검색이 아닌 'AI 렌즈(메뉴판 스캐너)' 기술로 데이터 활용성과 구현성에서 경쟁 우위를 점합니다.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-600 mt-0.5 font-bold">✔️</span>
+                            <span><strong>확장성:</strong> TourAPI를 활용하여 안심 식사 후 가벼운 '산책 코스'를 연계함으로써 웰니스 관광(Wellness Tourism) 모델로 확장 가능합니다.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-indigo-50 p-5 rounded-md border border-indigo-100 mt-6 hover:shadow-md transition-shadow">
+                    <h3 class="font-semibold text-indigo-800 mb-3 flex items-center gap-2">💡 신규 서비스 기획 추천: 과제 3번 (K-Route Planner)</h3>
+                    <p class="text-sm text-indigo-700 mb-4">오키밀을 제외하고 새로운 서비스를 기획한다면, K-콘텐츠 글로벌 팬덤의 로컬 방문을 유도하는 플랫폼을 추천합니다.</p>
+                    <ul class="space-y-3 text-sm text-indigo-900">
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-600 mt-0.5 font-bold">📌</span>
+                            <span><strong>핵심 기능 1:</strong> 아티스트 고향/촬영지 정보 다국어 매핑 (TourAPI 연동)</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-600 mt-0.5 font-bold">📌</span>
+                            <span><strong>핵심 기능 2:</strong> 지방 이동을 위한 원스톱 교통편 예매 및 길찾기 제공</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-600 mt-0.5 font-bold">📌</span>
+                            <span><strong>핵심 기능 3:</strong> 글로벌 팬덤 간 택시 쉐어링 및 동행 커뮤니티 결합</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 해결 과제 정의 -->
+        <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="text-primary">🎯</span> 해결 과제 정의 (Problem Definition)
+                </h2>
+            </div>
+            <div class="p-6">
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">맞춤형 식당 정보 부족으로 인한 만성질환자의 외식 불안감 발생</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-red-50 p-5 rounded-md border border-red-100 hover:shadow-md transition-shadow">
+                        <h4 class="font-semibold text-red-800 mb-3">🚨 현상 및 문제점</h4>
+                        <ul class="list-disc pl-5 text-sm text-red-700 space-y-2">
+                            <li>'안전한 음식' 여부 파악 불가로 인한 외식 불안감 증폭</li>
+                            <li>외국인 관광객의 경우 언어 장벽으로 인한 메뉴 성분 파악 불가능</li>
+                        </ul>
+                    </div>
+                    <div class="bg-orange-50 p-5 rounded-md border border-orange-100 hover:shadow-md transition-shadow">
+                        <h4 class="font-semibold text-orange-800 mb-3">🔎 근본 원인</h4>
+                        <ul class="list-disc pl-5 text-sm text-orange-700 space-y-2">
+                            <li>개인의 건강상태를 반영한 초개인화된 식당 필터링 서비스 부재</li>
+                            <li>식당 메뉴판의 영양/알레르기 정보 다국어 제공 미흡</li>
+                            <li>식후 혈당 관리를 위한 연계 인프라(산책로 등) 안내 부족</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 데이터 전략 및 기대효과 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <section class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <span class="text-primary">💡</span> 공공데이터 활용 전략
+                    </h2>
+                </div>
+                <div class="p-6 space-y-5">
+                    <div>
+                        <h3 class="font-semibold text-slate-700 text-sm bg-slate-100 inline-block px-2 py-1 rounded">TourAPI (필수)</h3>
+                        <p class="text-sm text-slate-600 mt-2">안심 식당 탐색 기반 데이터 활용. 식후 산책 코스 및 위치 기반 걷기 여행 연계.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-700 text-sm bg-slate-100 inline-block px-2 py-1 rounded">식품의약품안전처 API</h3>
+                        <p class="text-sm text-slate-600 mt-2">식품 영양성분 및 알레르겐 정보를 AI 렌즈 텍스트 인식 결과와 교차 검증.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-700 text-sm bg-slate-100 inline-block px-2 py-1 rounded">Google Vision & Gemini</h3>
+                        <p class="text-sm text-slate-600 mt-2">메뉴판 이미지 OCR 추출 및 다국어 번역, 위험 성분 포함 가능성 추론.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <span class="text-primary">✨</span> 기대 효과
+                    </h2>
+                </div>
+                <div class="p-6 space-y-5">
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-0.5">1</div>
+                        <div>
+                            <h3 class="font-semibold text-slate-700 text-sm">식당 탐색 시간 단축</h3>
+                            <p class="text-sm text-slate-600 mt-1">N시간에서 검색 즉시 맞춤형 결과 제공으로 획기적 탐색 시간 단축.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-0.5">2</div>
+                        <div>
+                            <h3 class="font-semibold text-slate-700 text-sm">외식 불안감 원천 해소</h3>
+                            <p class="text-sm text-slate-600 mt-1">언어 장벽과 정보 불투명성을 제거하여 누구나 안전하고 자유로운 식사 경험.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-0.5">3</div>
+                        <div>
+                            <h3 class="font-semibold text-slate-700 text-sm">웰니스 관광 선도</h3>
+                            <p class="text-sm text-slate-600 mt-1">단순 식사를 넘어 산책 연계 등 지속 가능한 헬스케어 관광(Wellness Tourism) 모델 제시.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+    </main>
+</body>
+</html>

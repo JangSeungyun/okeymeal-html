@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target Persona - OkeyMeal</title>
+    <!-- Tailwind CSS -->
+    <script src="../../../assets/js/tailwindcss.js"></script>
+    <!-- Mermaid -->
+    <script src="../../../assets/js/mermaid.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#0d9488', secondary: '#f0fdfa' },
+                    fontFamily: { sans: ['Pretendard', 'sans-serif'] }
+                }
+            }
+        }
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; }
+        .mermaid { background: white; padding: 1.5rem; border-radius: 0.5rem; }
+    </style>
+</head>
+<body class="text-slate-800">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl">OK</div>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-800">OkeyMeal</h1>
+                    <p class="text-xs text-slate-500">타겟 페르소나 정의서</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="inline-block bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full font-semibold">v2.0.0</span>
+                <p class="text-xs text-slate-500 mt-1">Updated: 2026-07-08</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-8 space-y-10">
+        
+        <!-- Persona 1: 다나카 -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                <span class="text-primary">1️⃣</span> 1차 핵심 타겟: 만성질환자 (당뇨 및 고혈압 관리)
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Profile Card -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-slate-100">
+                    <div class="bg-blue-600 h-24 flex items-end px-6 pb-4 relative">
+                        <div class="absolute -bottom-10 w-20 h-20 bg-white rounded-full flex items-center justify-center text-4xl shadow-md border-4 border-white">👴🏻</div>
+                    </div>
+                    <div class="px-6 pt-12 pb-6">
+                        <h3 class="text-xl font-bold text-slate-800">다나카 (Tanaka)</h3>
+                        <p class="text-sm text-slate-500 font-medium mt-1">68세 · 일본 · 은퇴 공무원</p>
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <span class="inline-block bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded font-bold mb-2">제2형 당뇨</span>
+                            <span class="inline-block bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded font-bold mb-2">고혈압</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Details -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-orange-500">
+                        <h4 class="font-bold text-slate-700 mb-2 flex items-center gap-2">🧨 Pain Point</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">맵고 짠 한국 음식 특성상 당류/나트륨 수치를 알 수 없어 외식이 망설여짐. 식후 혈당이 치솟을까 봐 걱정되어 식사 후 쉴 곳이나 가볍게 걸을 곳을 항상 고민함. 외국어 서비스 부족으로 식재료나 조리 방식 변경 요청이 불가능함.</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-teal-500">
+                        <h4 class="font-bold text-slate-700 mb-2 flex items-center gap-2">✨ Needs</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">한국관광공사 및 식약처 데이터를 활용해 검증된 '저당/저염 안심 식당' 추천. 식사 직후 혈당 관리를 위해 가볍게 걸을 수 있는 주변 명소나 산책 코스 정보 제공.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Journey Map -->
+            <div class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden">
+                <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                    <h4 class="font-bold text-slate-700">🗺 고객 여정 지도</h4>
+                    <div class="flex gap-2">
+                        <button onclick="zoomNode(this.closest('.overflow-hidden').querySelector('.mermaid'), 1.2)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➕ 확대</button>
+                        <button onclick="zoomNode(this.closest('.overflow-hidden').querySelector('.mermaid'), 0.8)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➖ 축소</button>
+                        <button onclick="resetZoomNode(this.closest('.overflow-hidden').querySelector('.mermaid'))" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">🔄 원래대로</button>
+                    </div>
+                </div>
+                <div class="p-6 overflow-auto bg-white relative min-h-[300px] flex justify-center">
+                    <div class="mermaid min-w-[800px] origin-top transition-transform duration-200" id="journey-dynamic">
+flowchart LR
+    A[여정 시작\n당뇨 관리 중인 여행자] --> B{점심 식당 검색}
+    B --> C[OkeyMeal 필터링\n'저염/저당' 안심 식당 탐색]
+    C --> D[투어 API 연동\n주변 식당 리스트업]
+    D --> E[식당 방문 및\n메뉴판 스캔 AI 렌즈]
+    E --> F[위험 성분 사전 차단\n안전하게 식사 완료]
+    F --> G[식후 활동 추천\n주변 걷기 코스/공원]
+    G --> H[가벼운 산책으로\n혈당 스파이크 방지]
+    H --> I([만족도 높은 웰니스 여행 완성])
+
+    style A fill:#fdf4ff,stroke:#d946ef
+    style C fill:#f0fdfa,stroke:#0d9488
+    style E fill:#f0fdfa,stroke:#0d9488
+    style G fill:#f0fdfa,stroke:#0d9488
+    style I fill:#fefce8,stroke:#eab308
+                </div>
+            </div>
+        </section>
+
+        <!-- Persona 2: 마크 -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                <span class="text-primary">2️⃣</span> 2차 핵심 타겟: 식이 제한자 (알레르기 보유자)
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Profile Card -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-slate-100">
+                    <div class="bg-indigo-600 h-24 flex items-end px-6 pb-4 relative">
+                        <div class="absolute -bottom-10 w-20 h-20 bg-white rounded-full flex items-center justify-center text-4xl shadow-md border-4 border-white">🧑🏼‍💻</div>
+                    </div>
+                    <div class="px-6 pt-12 pb-6">
+                        <h3 class="text-xl font-bold text-slate-800">마크 (Mark)</h3>
+                        <p class="text-sm text-slate-500 font-medium mt-1">32세 · 미국 · 소프트웨어 엔지니어</p>
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <span class="inline-block bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded font-bold mb-2">땅콩 알레르기 (치명적)</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Details -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-orange-500">
+                        <h4 class="font-bold text-slate-700 mb-2 flex items-center gap-2">🧨 Pain Point</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">양념장이나 반찬에 숨겨진 견과류 성분을 확인할 길이 없음. 사장님께 영어로 물어봐도 소통 오류가 발생할까 봐 극심한 공포를 느낌. 이로 인해 한국 로컬 맛집 방문을 포기하고 프랜차이즈 식당만 찾음.</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-teal-500">
+                        <h4 class="font-bold text-slate-700 mb-2 flex items-center gap-2">✨ Needs</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">메뉴판만 스캔해도 알레르기 유발 성분을 다국어로 번역해 주고 경고해 주는 AI 렌즈. 응급 상황(아나필락시스) 발생 시 외국어 진료가 가능한 주변 응급실/병원 SOS 연계.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Journey Map -->
+            <div class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden">
+                <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                    <h4 class="font-bold text-slate-700">🗺 고객 여정 지도</h4>
+                    <div class="flex gap-2">
+                        <button onclick="zoomNode(this.closest('.overflow-hidden').querySelector('.mermaid'), 1.2)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➕ 확대</button>
+                        <button onclick="zoomNode(this.closest('.overflow-hidden').querySelector('.mermaid'), 0.8)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➖ 축소</button>
+                        <button onclick="resetZoomNode(this.closest('.overflow-hidden').querySelector('.mermaid'))" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">🔄 원래대로</button>
+                    </div>
+                </div>
+                <div class="p-6 overflow-auto bg-white relative min-h-[300px] flex justify-center">
+                    <div class="mermaid min-w-[800px] origin-top transition-transform duration-200" id="journey-dynamic">
+flowchart LR
+    A[로컬 맛집 탐방 희망\n알레르기 보유자] --> B[식당 도착\n메뉴판 확인]
+    B --> C[OkeyMeal AI 렌즈로\n메뉴판 스캔]
+    C --> D{OCR/AI 성분 분석}
+    D -- 위험 성분 발견 --> E[빨간색 경고 알림\n해당 메뉴 회피]
+    D -- 안전 성분 확인 --> F[주문 진행]
+    F --> G[점주에게 QR로\n다시 한번 주의사항 전달]
+    G --> H([안심하고 로컬 미식 경험])
+    
+    style A fill:#fdf4ff,stroke:#d946ef
+    style C fill:#f0fdfa,stroke:#0d9488
+    style E fill:#fef2f2,stroke:#ef4444
+    style G fill:#f0fdfa,stroke:#0d9488
+    style H fill:#fefce8,stroke:#eab308
+                </div>
+            </div>
+        </section>
+
+        <!-- Persona 3: 점주 -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                <span class="text-primary">🤝</span> 파트너: 디지털 취약계층 소상공인 점주
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Profile Card -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-slate-100">
+                    <div class="bg-emerald-600 h-24 flex items-end px-6 pb-4 relative">
+                        <div class="absolute -bottom-10 w-20 h-20 bg-white rounded-full flex items-center justify-center text-4xl shadow-md border-4 border-white">👩🏻‍🍳</div>
+                    </div>
+                    <div class="px-6 pt-12 pb-6">
+                        <h3 class="text-xl font-bold text-slate-800">고순자 (Ko Soon-ja)</h3>
+                        <p class="text-sm text-slate-500 font-medium mt-1">61세 · 한국 · 식당 운영 22년차</p>
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <span class="inline-block bg-slate-100 text-slate-700 text-xs px-2.5 py-1 rounded font-bold mb-2">디지털 리터러시 부족</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Details -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-orange-500">
+                        <h4 class="font-bold text-slate-700 mb-2 flex items-center gap-2">🧨 Pain Point</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">외국인 관광객이 늘어나면서 "Is this Halal?"이나 "No Peanut?" 같은 질문을 받지만, 영어를 못해 소통이 단절됨. 비싼 돈을 주고 다국어 메뉴판이나 키오스크를 도입할 의향이 없음.</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-teal-500">
+                        <h4 class="font-bold text-slate-700 mb-2 flex items-center gap-2">✨ Needs</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">앱 설치나 복잡한 가입 절차 없이, 기존에 사용하는 카카오톡 수준의 직관적인 웹 알림(FCM)으로 외국인 손님의 식이 제약 정보를 한국어로 요약해서 알려주는 기능.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <script>
+        const zoomLevels = {};
+        const nodeZoomLevels = new WeakMap();
+        
+        function zoom(id, factor) {
+            if(!zoomLevels[id]) zoomLevels[id] = 1;
+            zoomLevels[id] *= factor;
+            const el = document.getElementById(id);
+            if (el) el.style.transform = `scale(${zoomLevels[id]})`;
+        }
+        function resetZoom(id) {
+            zoomLevels[id] = 1;
+            const el = document.getElementById(id);
+            if (el) el.style.transform = `scale(1)`;
+        }
+        
+        function zoomNode(node, factor) {
+            let currentZoom = nodeZoomLevels.get(node) || 1;
+            currentZoom *= factor;
+            nodeZoomLevels.set(node, currentZoom);
+            node.style.transform = `scale(${currentZoom})`;
+        }
+        function resetZoomNode(node) {
+            nodeZoomLevels.set(node, 1);
+            node.style.transform = `scale(1)`;
+        }
+    </script>
+</body>
+</html>

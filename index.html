@@ -1,973 +1,206 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>OkeyMeal WBS — 한눈에 보기</title>
-<style>
-  :root {
-    --primary: #E07B47;
-    --primary-dark: #B85F30;
-    --bg: #F7F5F2;
-    --card: #FFFFFF;
-    --text: #2C2C2C;
-    --text-muted: #6B6B6B;
-    --border: #E5E2DD;
-
-    --phase-1: #5C6BC0; /* 분석 */
-    --phase-2: #26A69A; /* 설계 */
-    --phase-3: #E07B47; /* 개발 */
-    --phase-4: #AB47BC; /* 테스트 */
-    --phase-5: #66BB6A; /* 배포 */
-    --market:  #FFB300;
-
-    --high: #EF5350;
-    --mid:  #FFA726;
-    --low:  #66BB6A;
-
-    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.55;
-    font-size: 14px;
-  }
-  .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px 80px; }
-
-  /* ============ Header ============ */
-  header.hero {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    color: #FFF;
-    border-radius: 16px;
-    padding: 32px 36px;
-    box-shadow: var(--shadow);
-    margin-bottom: 28px;
-  }
-  .hero h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; }
-  .hero .subtitle { font-size: 14px; opacity: 0.9; margin-bottom: 24px; }
-  .hero-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
-  .stat {
-    background: rgba(255,255,255,0.14);
-    border: 1px solid rgba(255,255,255,0.22);
-    border-radius: 10px;
-    padding: 14px 16px;
-    backdrop-filter: blur(4px);
-  }
-  .stat .label { font-size: 11px; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
-  .stat .value { font-size: 22px; font-weight: 700; }
-  .stat .unit { font-size: 12px; opacity: 0.8; margin-left: 4px; font-weight: 400; }
-
-  /* ============ Section common ============ */
-  section { margin-bottom: 32px; }
-  .section-title {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin: 0 0 16px;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .section-title .num {
-    background: var(--primary);
-    color: #FFF;
-    border-radius: 50%;
-    width: 26px;
-    height: 26px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-  .section-title .desc { font-size: 12px; color: var(--text-muted); font-weight: 400; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
-    box-shadow: var(--shadow);
-  }
-
-  /* ============ Gantt ============ */
-  .gantt-wrapper { overflow-x: auto; }
-  .gantt {
-    display: grid;
-    grid-template-columns: 140px repeat(21, minmax(36px, 1fr));
-    gap: 2px;
-    min-width: 1000px;
-    font-size: 11px;
-  }
-  .gantt-header {
-    display: contents;
-  }
-  .gantt-header .cell {
-    background: #F0EDE8;
-    color: var(--text-muted);
-    font-weight: 600;
-    text-align: center;
-    padding: 8px 2px;
-    border-radius: 4px;
-  }
-  .gantt-header .label-cell { text-align: left; padding-left: 12px; }
-  .gantt-row { display: contents; }
-  .gantt-row .label-cell {
-    background: #FAFAF7;
-    padding: 10px 12px;
-    font-weight: 600;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-  }
-  .gantt-bar {
-    color: #FFF;
-    border-radius: 4px;
-    padding: 8px 8px;
-    font-weight: 600;
-    text-align: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-  }
-  .gantt-bar.p1 { background: var(--phase-1); }
-  .gantt-bar.p2 { background: var(--phase-2); }
-  .gantt-bar.p3 { background: var(--phase-3); }
-  .gantt-bar.p4 { background: var(--phase-4); }
-  .gantt-bar.p5 { background: var(--phase-5); }
-  .gantt-bar.mk { background: var(--market); }
-
-  .gantt-month-row { display: contents; }
-  .gantt-month-row .month {
-    background: transparent;
-    color: var(--text-muted);
-    font-weight: 700;
-    text-align: center;
-    font-size: 12px;
-    padding: 4px 0 8px;
-  }
-
-  /* Milestones overlay */
-  .milestone-row { display: contents; }
-  .milestone-marker {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 24px;
-    position: relative;
-  }
-  .milestone-dot {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: #FFF;
-    font-size: 10px;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #FFF;
-    box-shadow: 0 0 0 2px var(--primary);
-  }
-  .milestone-dot.deadline { background: #D32F2F; box-shadow: 0 0 0 2px #D32F2F; }
-
-  /* ============ Phase Cards ============ */
-  .phase-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-  }
-  .phase-card {
-    background: var(--card);
-    border-radius: 10px;
-    padding: 16px;
-    border-top: 4px solid;
-    box-shadow: var(--shadow);
-    position: relative;
-  }
-  .phase-card.p1 { border-top-color: var(--phase-1); }
-  .phase-card.p2 { border-top-color: var(--phase-2); }
-  .phase-card.p3 { border-top-color: var(--phase-3); }
-  .phase-card.p4 { border-top-color: var(--phase-4); }
-  .phase-card.p5 { border-top-color: var(--phase-5); }
-  .phase-card .phase-num { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; letter-spacing: 0.04em; }
-  .phase-card .phase-name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-  .phase-card .phase-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
-  .phase-card .phase-pct {
-    font-size: 24px;
-    font-weight: 800;
-    line-height: 1;
-  }
-  .phase-card.p1 .phase-pct { color: var(--phase-1); }
-  .phase-card.p2 .phase-pct { color: var(--phase-2); }
-  .phase-card.p3 .phase-pct { color: var(--phase-3); }
-  .phase-card.p4 .phase-pct { color: var(--phase-4); }
-  .phase-card.p5 .phase-pct { color: var(--phase-5); }
-  .phase-card .phase-output {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px dashed var(--border);
-    font-size: 12px;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-
-  /* ============ Milestone List ============ */
-  .milestone-list {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-  }
-  .ms-item {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 12px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    position: relative;
-  }
-  .ms-item.deadline { border-color: #D32F2F; background: #FFF5F5; }
-  .ms-id {
-    display: inline-block;
-    background: var(--primary);
-    color: #FFF;
-    border-radius: 999px;
-    padding: 2px 10px;
-    font-size: 11px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .ms-item.deadline .ms-id { background: #D32F2F; }
-  .ms-date { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-  .ms-name { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
-
-  /* ============ Phase 3 Subsections ============ */
-  .subgrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 10px;
-  }
-  .sub-card {
-    background: #FBFAF7;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 14px;
-  }
-  .sub-card .sub-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--phase-3);
-    margin-bottom: 4px;
-  }
-  .sub-card .sub-week { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
-  .sub-card .sub-tasks { font-size: 11px; color: var(--text); line-height: 1.5; }
-  .sub-card .sub-tasks .count { font-weight: 700; color: var(--primary-dark); }
-
-  /* ============ Critical Path ============ */
-  .critical-chains {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 14px;
-  }
-  .chain-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 18px;
-    box-shadow: var(--shadow);
-  }
-  .chain-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
-  .chain-flow { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-size: 12px; }
-  .chain-node {
-    background: #F0EDE8;
-    color: var(--text);
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-weight: 600;
-    border: 1px solid var(--border);
-  }
-  .chain-node.highlight { background: var(--primary); color: #FFF; border-color: var(--primary); }
-  .chain-arrow { color: var(--text-muted); font-weight: 700; }
-
-  /* ============ Risk Matrix ============ */
-  .risk-matrix {
-    display: grid;
-    grid-template-columns: 100px repeat(3, 1fr);
-    gap: 4px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .risk-matrix .header,
-  .risk-matrix .y-label,
-  .risk-matrix .cell {
-    background: var(--card);
-    padding: 12px;
-    min-height: 90px;
-  }
-  .risk-matrix .header {
-    background: #F0EDE8;
-    text-align: center;
-    font-weight: 700;
-    font-size: 12px;
-    min-height: 36px;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .risk-matrix .y-label {
-    background: #F0EDE8;
-    font-weight: 700;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  .risk-cell { display: flex; flex-wrap: wrap; gap: 4px; align-content: flex-start; }
-  .risk-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 6px 2px 4px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    background: #F5F2EE;
-    border: 1px solid var(--border);
-  }
-  .risk-chip .impact-high { color: var(--high); }
-  .risk-chip .impact-mid { color: var(--mid); }
-  .risk-chip .impact-low { color: var(--low); }
-  .risk-id {
-    background: var(--text);
-    color: #FFF;
-    border-radius: 999px;
-    padding: 1px 6px;
-    font-size: 10px;
-    font-weight: 700;
-  }
-
-  .risk-detail-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 16px;
-    font-size: 12px;
-  }
-  .risk-detail-table th,
-  .risk-detail-table td {
-    padding: 10px 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-  }
-  .risk-detail-table th {
-    background: #F0EDE8;
-    font-weight: 700;
-    color: var(--text);
-    position: sticky;
-    top: 0;
-  }
-  .badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 10px;
-    font-weight: 700;
-    background: var(--border);
-    color: var(--text);
-  }
-  .badge.h { background: #FFEBEE; color: var(--high); }
-  .badge.m { background: #FFF3E0; color: var(--mid); }
-  .badge.l { background: #E8F5E9; color: var(--low); }
-
-  /* ============ Marketing Track ============ */
-  .market-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-  }
-  .market-item {
-    background: var(--card);
-    border-left: 4px solid var(--market);
-    border-radius: 8px;
-    padding: 12px 14px;
-    box-shadow: var(--shadow);
-  }
-  .market-item .mk-id { font-size: 11px; color: var(--market); font-weight: 700; margin-bottom: 4px; letter-spacing: 0.04em; }
-  .market-item .mk-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-  .market-item .mk-date { font-size: 11px; color: var(--text-muted); }
-
-  /* ============ Footer ============ */
-  footer {
-    margin-top: 48px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    text-align: center;
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-  footer a { color: var(--primary-dark); text-decoration: none; }
-
-  /* ============ Legend ============ */
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 12px;
-    font-size: 12px;
-  }
-  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
-  .legend-swatch {
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
-  }
-
-  @media (max-width: 900px) {
-    .hero-stats { grid-template-columns: repeat(2, 1fr); }
-    .phase-grid { grid-template-columns: 1fr 1fr; }
-    .milestone-list { grid-template-columns: 1fr 1fr; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OkeyMeal 프로젝트 문서 통합 허브</title>
+    <!-- Tailwind CSS -->
+    <script src="assets/js/tailwindcss.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#0d9488', secondary: '#f0fdfa' },
+                    fontFamily: { sans: ['Pretendard', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; overflow: hidden; }
+        .active-link { background-color: #f0fdfa; color: #0f766e; border-right: 4px solid #0d9488; font-weight: 600; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+    </style>
 </head>
-<body>
-<div style="background:#FFF8E1; border-bottom:1px solid #FFB300; padding:8px 16px; text-align:center; font-size:12px; color:#6B6B6B;">
-  📢 일정 공개용 미러본입니다. 상세 기술·요구사항 문서는 비공개 저장소에서 관리됩니다.
-</div>
-<div class="container">
+<body class="bg-slate-50 h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow-sm z-10 border-b border-slate-200 shrink-0">
+        <div class="px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <a href="assets/html/home.html" target="contentFrame" onclick="setActive(this, true)" class="flex items-center gap-3 cursor-pointer" title="홈으로 이동">
+                    <div class="w-8 h-8 bg-teal-600 text-white rounded-md flex items-center justify-center font-bold shadow-sm">OK</div>
+                    <h1 class="text-xl font-bold text-slate-800 tracking-tight hover:text-teal-600 transition-colors">OkeyMeal 문서 허브</h1>
+                </a>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- Search -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="searchInput" placeholder="메뉴 검색..." class="pl-9 pr-4 py-1.5 bg-slate-100 border border-transparent rounded-full text-sm focus:bg-white focus:border-teal-400 focus:ring-2 focus:ring-teal-100 outline-none transition-all w-48 text-slate-700">
+                    <span class="absolute left-3 top-1.5 text-slate-400 text-sm">🔍</span>
+                </div>
+                <!-- Refresh Button -->
+                <button onclick="refreshFrame()" class="text-slate-400 hover:text-teal-600 transition-colors bg-slate-50 p-1.5 rounded-md border border-slate-200" title="현재 문서 새로고침">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                </button>
+                <span class="inline-block bg-slate-100 text-slate-600 text-xs px-3 py-1.5 rounded-full font-medium ml-2">2026 관광데이터 공모전 (과제 5)</span>
+            </div>
+        </div>
+    </header>
 
-  <!-- ===================== HERO ===================== -->
-  <header class="hero">
-    <h1>📅 OkeyMeal WBS — 한눈에 보기</h1>
-    <div class="subtitle">v0.4.0 · 최종 갱신 2026-05-08 · 작성 숭늉 · 데드라인 <strong>2026-09-30</strong> · 인력 <strong>풀스택 시니어 2인 (트랙 A·B)</strong></div>
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="label">전체 기간</div>
-        <div class="value">21<span class="unit">주 / 147일</span></div>
-      </div>
-      <div class="stat">
-        <div class="label">단계 수</div>
-        <div class="value">5<span class="unit">Phase</span></div>
-      </div>
-      <div class="stat">
-        <div class="label">마일스톤</div>
-        <div class="value">7<span class="unit">M1~M7</span></div>
-      </div>
-      <div class="stat">
-        <div class="label">병렬 트랙</div>
-        <div class="value">1<span class="unit">Google Play</span></div>
-      </div>
-      <div class="stat">
-        <div class="label">리스크</div>
-        <div class="value">12<span class="unit">R1~R12</span></div>
-      </div>
+    <!-- Main Container -->
+    <div class="flex flex-1 overflow-hidden relative">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 overflow-y-auto z-20">
+            <div class="p-5" id="sidebar-menu">
+                <!-- Menu dynamically generated by JS -->
+            </div>
+        </aside>
+
+        <!-- Content Frame -->
+        <main class="flex-1 bg-slate-100 relative">
+            <div id="loading" class="absolute inset-0 flex items-center justify-center bg-slate-50 z-0 transition-opacity duration-300 opacity-0" style="display: none;">
+                <div class="animate-pulse flex flex-col items-center">
+                    <div class="w-10 h-10 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin"></div>
+                    <p class="mt-4 text-slate-500 text-sm font-medium">문서를 불러오는 중입니다...</p>
+                </div>
+            </div>
+            <!-- 초기 화면을 home.html로 설정 -->
+            <iframe name="contentFrame" id="contentFrame" src="assets/html/home.html" class="absolute inset-0 w-full h-full border-none z-10 bg-white" onload="hideLoading()"></iframe>
+        </main>
     </div>
-  </header>
 
-  <!-- ===================== 1. GANTT ===================== -->
-  <section>
-    <h2 class="section-title">
-      <span class="num">1</span>
-      일정 한눈에 보기
-      <span class="desc">2026-05-06 ~ 2026-09-30 · 21주 간트 차트 + 마일스톤</span>
-    </h2>
-    <div class="card">
-      <div class="legend">
-        <span class="legend-item"><span class="legend-swatch" style="background: var(--phase-1)"></span>1. 분석</span>
-        <span class="legend-item"><span class="legend-swatch" style="background: var(--phase-2)"></span>2. 설계</span>
-        <span class="legend-item"><span class="legend-swatch" style="background: var(--phase-3)"></span>3. 개발</span>
-        <span class="legend-item"><span class="legend-swatch" style="background: var(--phase-4)"></span>4. 테스트</span>
-        <span class="legend-item"><span class="legend-swatch" style="background: var(--phase-5)"></span>5. 배포</span>
-        <span class="legend-item"><span class="legend-swatch" style="background: var(--market)"></span>마켓 트랙</span>
-      </div>
-      <div class="gantt-wrapper">
-        <div class="gantt">
-          <!-- Month row -->
-          <div class="gantt-month-row">
-            <div class="month"></div>
-            <div class="month" style="grid-column: span 4">2026-05</div>
-            <div class="month" style="grid-column: span 4">06</div>
-            <div class="month" style="grid-column: span 5">07</div>
-            <div class="month" style="grid-column: span 4">08</div>
-            <div class="month" style="grid-column: span 4">09</div>
-          </div>
+    <script>
+        // 1. Menu Configuration (Single Source of Truth)
+        // 봇(AI)은 시각화 파일을 추가할 때 이 배열의 구조에 객체를 추가해야 합니다.
+        const menuConfig = [
+            {
+                id: "01",
+                title: "01. Analysis Strategy",
+                items: [
+                    { name: "과제 분석서 (Task Analysis)", path: "01.Analysis_Strategy/html/Task_Analysis/dashboard.html" },
+                    { name: "타겟 페르소나 (Target Persona)", path: "01.Analysis_Strategy/html/Target_Persona/personas.html" }
+                ]
+            },
+            {
+                id: "02",
+                title: "02. Planning Design",
+                items: [
+                    { name: "요구사항 정의서 (Requirements)", path: "02.Planning_Design/html/Requirements/dashboard.html" },
+                    { name: "서비스 구조도 (Architecture)", path: "02.Planning_Design/html/Architecture/diagrams.html" }
+                ]
+            },
+            {
+                id: "03",
+                title: "03. Service Development",
+                items: []
+            },
+            {
+                id: "04",
+                title: "04. Testing QA",
+                items: []
+            },
+            {
+                id: "05",
+                title: "05. Submission Review",
+                items: []
+            }
+        ];
 
-          <!-- Week header -->
-          <div class="gantt-header">
-            <div class="cell label-cell">단계 / 주차</div>
-            <div class="cell">W1</div>
-            <div class="cell">W2</div>
-            <div class="cell">W3</div>
-            <div class="cell">W4</div>
-            <div class="cell">W5</div>
-            <div class="cell">W6</div>
-            <div class="cell">W7</div>
-            <div class="cell">W8</div>
-            <div class="cell">W9</div>
-            <div class="cell">W10</div>
-            <div class="cell">W11</div>
-            <div class="cell">W12</div>
-            <div class="cell">W13</div>
-            <div class="cell">W14</div>
-            <div class="cell">W15</div>
-            <div class="cell">W16</div>
-            <div class="cell">W17</div>
-            <div class="cell">W18</div>
-            <div class="cell">W19</div>
-            <div class="cell">W20</div>
-            <div class="cell">W21</div>
-          </div>
+        // 2. Render Sidebar
+        const sidebarContainer = document.getElementById('sidebar-menu');
+        
+        menuConfig.forEach(section => {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'mb-6';
+            
+            const header = document.createElement('h2');
+            header.className = 'text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-3';
+            header.innerText = section.title;
+            sectionDiv.appendChild(header);
 
-          <!-- Phase 1 -->
-          <div class="gantt-row">
-            <div class="label-cell" style="color: var(--phase-1)">1. 분석</div>
-            <div class="gantt-bar p1" style="grid-column: 2 / span 2">2주 · 10%</div>
-          </div>
+            const nav = document.createElement('nav');
+            nav.className = 'space-y-1';
+            
+            if (section.items.length > 0) {
+                section.items.forEach(item => {
+                    const a = document.createElement('a');
+                    a.href = item.path;
+                    a.target = 'contentFrame';
+                    a.className = 'block px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-md transition-colors';
+                    a.innerText = item.name;
+                    a.onclick = function() { setActive(this); };
+                    nav.appendChild(a);
+                });
+            } else {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'px-3 py-2 text-xs text-slate-400 italic';
+                emptyState.innerText = '추가 예정...';
+                nav.appendChild(emptyState);
+            }
+            
+            sectionDiv.appendChild(nav);
+            sidebarContainer.appendChild(sectionDiv);
+        });
 
-          <!-- Phase 2 -->
-          <div class="gantt-row">
-            <div class="label-cell" style="color: var(--phase-2)">2. 설계</div>
-            <div class="gantt-bar p2" style="grid-column: 4 / span 4">4주 · 19%</div>
-          </div>
+        // 3. UI Interactions
+        function setActive(element, isHome = false) {
+            document.querySelectorAll('aside a').forEach(el => el.classList.remove('active-link'));
+            if (!isHome) {
+                element.classList.add('active-link');
+            }
+            showLoading();
+        }
 
-          <!-- Phase 3 -->
-          <div class="gantt-row">
-            <div class="label-cell" style="color: var(--phase-3)">3. 개발</div>
-            <div class="gantt-bar p3" style="grid-column: 8 / span 12">12주 · 57%</div>
-          </div>
+        function showLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'flex';
+            // Trigger reflow to ensure transition runs
+            void loading.offsetWidth;
+            loading.style.opacity = '1';
+        }
 
-          <!-- Phase 4 -->
-          <div class="gantt-row">
-            <div class="label-cell" style="color: var(--phase-4)">4. 테스트</div>
-            <div class="gantt-bar p4" style="grid-column: 20 / span 2">2주 · 10%</div>
-          </div>
+        function hideLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.opacity = '0';
+            setTimeout(() => { loading.style.display = 'none'; }, 300);
+        }
 
-          <!-- Phase 5 -->
-          <div class="gantt-row">
-            <div class="label-cell" style="color: var(--phase-5)">5. 배포</div>
-            <div class="gantt-bar p5" style="grid-column: 22 / span 1">1주 · 4%</div>
-          </div>
+        // 4. Refresh Button
+        function refreshFrame() {
+            const frame = document.getElementById('contentFrame');
+            showLoading();
+            // iframe reload
+            try {
+                frame.contentWindow.location.reload(true);
+            } catch(e) {
+                frame.src = frame.src; // fallback
+            }
+        }
 
-          <!-- Marketing -->
-          <div class="gantt-row">
-            <div class="label-cell" style="color: var(--market)">📱 마켓 등록</div>
-            <div class="gantt-bar mk" style="grid-column: 13 / span 9">MK1 ~ MK6 (W12-W20)</div>
-          </div>
-
-          <!-- Milestone row -->
-          <div class="milestone-row">
-            <div class="label-cell" style="background: transparent; padding: 12px; font-size: 11px; color: var(--text-muted)">마일스톤</div>
-            <div></div>
-            <div class="milestone-marker"><span class="milestone-dot" title="M1: 분석 완료 (05-19)">M1</span></div>
-            <div></div><div></div><div></div>
-            <div class="milestone-marker"><span class="milestone-dot" title="M2: 설계 완료 (06-16)">M2</span></div>
-            <div></div><div></div><div></div><div></div><div></div><div></div>
-            <div class="milestone-marker"><span class="milestone-dot" title="M3: 알파 빌드 (07-28)">M3</span></div>
-            <div></div><div></div><div></div>
-            <div class="milestone-marker"><span class="milestone-dot" title="M4: 베타 빌드 (08-25)">M4</span></div>
-            <div></div>
-            <div class="milestone-marker"><span class="milestone-dot" title="M5: RC (09-08)">M5</span></div>
-            <div></div>
-            <div class="milestone-marker"><span class="milestone-dot deadline" title="M7: 정식 배포 (09-30)">M7</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== 2. PHASES ===================== -->
-  <section>
-    <h2 class="section-title">
-      <span class="num">2</span>
-      Phase 요약
-      <span class="desc">5단계 비중과 핵심 산출물</span>
-    </h2>
-    <div class="phase-grid">
-      <div class="phase-card p1">
-        <div class="phase-num">PHASE 1</div>
-        <div class="phase-name">분석</div>
-        <div class="phase-meta">2주 · W1-W2<br/>05-06 ~ 05-19</div>
-        <div class="phase-pct">10<span style="font-size:14px">%</span></div>
-        <div class="phase-output">요구사항 명세 · 외부 API 인벤토리 · MVP 핵심 기능 명세 (Core_Features v1.5.0) · 페르소나 검증 (Target_Persona v1.2.0) · 경쟁 벤치마크 (Competitor_Benchmark v1.0.0) · 리스크 레지스터 (Risk_Register v1.0.0) · CODEOWNERS + R11 완화 정책 (Free 환경 다층 완화)</div>
-      </div>
-      <div class="phase-card p2">
-        <div class="phase-num">PHASE 2</div>
-        <div class="phase-name">설계</div>
-        <div class="phase-meta">4주 · W3-W6<br/>05-20 ~ 06-16</div>
-        <div class="phase-pct">19<span style="font-size:14px">%</span></div>
-        <div class="phase-output">ERD · API 명세 · AI 알고리즘 · 와이어프레임 · STRIDE · I18n 정책 · LLM/AI Base Code PoC</div>
-      </div>
-      <div class="phase-card p3">
-        <div class="phase-num">PHASE 3</div>
-        <div class="phase-name">개발</div>
-        <div class="phase-meta">12주 · W7-W18<br/>06-17 ~ 09-08</div>
-        <div class="phase-pct">57<span style="font-size:14px">%</span></div>
-        <div class="phase-output">11개 서브 워크스트림 · 백엔드 · 프론트 · 모바일 · 점주 콘솔</div>
-      </div>
-      <div class="phase-card p4">
-        <div class="phase-num">PHASE 4</div>
-        <div class="phase-name">테스트</div>
-        <div class="phase-meta">2주 · W19-W20<br/>09-09 ~ 09-22</div>
-        <div class="phase-pct">10<span style="font-size:14px">%</span></div>
-        <div class="phase-output">단위·통합 · E2E · 보안 · 부하 · a11y · 다국어 · UAT · DR</div>
-      </div>
-      <div class="phase-card p5">
-        <div class="phase-num">PHASE 5</div>
-        <div class="phase-name">배포</div>
-        <div class="phase-meta">1주 · W21<br/>09-23 ~ 09-30</div>
-        <div class="phase-pct">4<span style="font-size:14px">%</span></div>
-        <div class="phase-output">staging 검증 · Blue-Green · 모니터링 · 시연 리허설 · runbooks</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== 3. MILESTONES ===================== -->
-  <section>
-    <h2 class="section-title">
-      <span class="num">3</span>
-      마일스톤 7개
-      <span class="desc">각 게이트 통과 시 다음 단계 진입</span>
-    </h2>
-    <div class="milestone-list">
-      <div class="ms-item">
-        <span class="ms-id">M1</span>
-        <div class="ms-date">2026-05-19</div>
-        <div class="ms-name">분석 완료<br/>설계 진입 게이트</div>
-      </div>
-      <div class="ms-item">
-        <span class="ms-id">M2</span>
-        <div class="ms-date">2026-06-16</div>
-        <div class="ms-name">설계 완료<br/>개발 진입 게이트</div>
-      </div>
-      <div class="ms-item">
-        <span class="ms-id">M3</span>
-        <div class="ms-date">2026-07-28</div>
-        <div class="ms-name">알파 빌드<br/>인증 + 도메인 + 프론트 골격</div>
-      </div>
-      <div class="ms-item">
-        <span class="ms-id">M4</span>
-        <div class="ms-date">2026-08-25</div>
-        <div class="ms-name">베타 빌드<br/>AI 추천·렌즈·다국어·점주</div>
-      </div>
-      <div class="ms-item">
-        <span class="ms-id">M5</span>
-        <div class="ms-date">2026-09-08</div>
-        <div class="ms-name">RC · Feature Freeze<br/>테스트 진입</div>
-      </div>
-      <div class="ms-item">
-        <span class="ms-id">M6</span>
-        <div class="ms-date">2026-09-15</div>
-        <div class="ms-name">마켓 사전 제출<br/>Google Play 심사</div>
-      </div>
-      <div class="ms-item deadline">
-        <span class="ms-id">M7</span>
-        <div class="ms-date">2026-09-30</div>
-        <div class="ms-name"><strong>정식 배포</strong><br/>데드라인 🚀</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== 4. PHASE 3 SUBSECTIONS ===================== -->
-  <section>
-    <h2 class="section-title">
-      <span class="num">4</span>
-      Phase 3 개발 — 11개 서브 워크스트림
-      <span class="desc">12주에 분산된 핵심 구현 트랙 · W7~W18</span>
-    </h2>
-    <div class="card">
-      <div class="subgrid">
-        <div class="sub-card">
-          <div class="sub-title">3.1 인프라 셋업</div>
-          <div class="sub-week">W7-W8 · 6 tasks</div>
-          <div class="sub-tasks">Monorepo · Docker Compose · CI · Flyway · 모니터링 · Nginx</div>
-        </div>
-        <div class="sub-card">
-          <div class="sub-title">3.2 인증 시스템</div>
-          <div class="sub-week">W9-W10 · 7 tasks</div>
-          <div class="sub-tasks">Guest JWT · 소셜 4종 · 토큰 회전 · Guest→Member · 점주 인증 분리</div>
-        </div>
-        <div class="sub-card">
-          <div class="sub-title">3.3 핵심 도메인</div>
-          <div class="sub-week">W11-W12 · 6 tasks</div>
-          <div class="sub-tasks">User · DietProfile · Restaurant · Menu · Review · 알레르기 룰엔진</div>
-        </div>
-        <div class="sub-card">
-          <div class="sub-title">3.4 데이터 융합</div>
-          <div class="sub-week">W12-W13 · 5 tasks</div>
-          <div class="sub-tasks">TourAPI · 식약처 · DLQ · Spring Batch · 임베딩 768d</div>
-        </div>
-        <div class="sub-card">
-          <div class="sub-title">3.5 AI 추천 엔진</div>
-          <div class="sub-week">W13-W14 · 7 tasks</div>
-          <div class="sub-tasks">HNSW · 코사인 유사도 · Cold-start · 컨텍스트 재정렬 · RAG · 캐시 · 기상</div>
-        </div>
-        <div class="sub-card">
-          <div class="sub-title">3.6 다국어 사전 번역</div>
-          <div class="sub-week">W14 · 4 tasks</div>
-          <div class="sub-tasks">LLM Batch · JSONB 4종 · 변경 감지 · 폴백 마킹</div>
-        </div>
-        <div class="sub-card">
-          <div class="sub-title">3.7 AI 렌즈 OCR</div>
-          <div class="sub-week">W15-W16 · 6 tasks</div>
-          <div class="sub-tasks">이미지 검증 · OCR · 메뉴 정제 · 알레르기 매칭 · 결과 화면 · 30분 삭제</div>
-        </div>
-        <div class="sub-card">
-          <div class="sub-title">3.8 검색 + 지도</div>
-          <div class="sub-week">W15-W16 · 6 tasks</div>
-          <div class="sub-tasks">다국어 검색 · Google Maps · Kakao 주소 · Naver 길찾기 · MapClient · PostGIS</div>
-        </div>
-        <div class="sub-card">
-          <div class="sub-title">3.9 점주 콘솔</div>
-          <div class="sub-week">W17 · 6 tasks</div>
-          <div class="sub-tasks">apps/owner Vite · 가입·승인 · 메뉴 CRUD · 리뷰 응대 · 푸시 · 라우팅</div>
-        </div>
-        <div class="sub-card">
-          <div class="sub-title">3.10 푸시 알림</div>
-          <div class="sub-week">W17 · 6 tasks</div>
-          <div class="sub-tasks">FCM · Token · Topic · 다국어 메시지 · Quiet Hours · 발송 로그</div>
-        </div>
-        <div class="sub-card">
-          <div class="sub-title">3.11 통합·튜닝</div>
-          <div class="sub-week">W18 · 6 tasks</div>
-          <div class="sub-tasks">E2E 통합 · 성능 튜닝 · 다국어 검수 · a11y · 버그 · M5 게이트</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== 5. CRITICAL PATH ===================== -->
-  <section>
-    <h2 class="section-title">
-      <span class="num">5</span>
-      크리티컬 패스
-      <span class="desc">지연 시 데드라인 직격 — 우선 모니터링 대상</span>
-    </h2>
-    <div class="critical-chains">
-      <div class="chain-card">
-        <div class="chain-title">🔗 백엔드 도메인 사슬</div>
-        <div class="chain-flow">
-          <span class="chain-node">ERD 2.1</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node">API 명세 2.3</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node">도메인 3.3</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node highlight">AI 추천 3.5</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node">AI 렌즈 3.7</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node">통합 3.11</span>
-        </div>
-      </div>
-      <div class="chain-card">
-        <div class="chain-title">🤖 AI 사슬</div>
-        <div class="chain-flow">
-          <span class="chain-node">알고리즘 2.2</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node highlight">Base Code 2.12</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node">임베딩 3.4.5</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node highlight">추천 엔진 3.5</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node">RAG 설명 3.5.5</span>
-        </div>
-      </div>
-      <div class="chain-card">
-        <div class="chain-title">📱 마켓 사슬 (외부 의존)</div>
-        <div class="chain-flow">
-          <span class="chain-node">M4 베타</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node">MK3 내부</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node highlight">MK5 심사</span>
-          <span class="chain-arrow">→</span>
-          <span class="chain-node">MK6 등록</span>
-        </div>
-      </div>
-    </div>
-    <div style="margin-top: 14px; padding: 12px 16px; background: #FFF8E1; border-left: 4px solid var(--market); border-radius: 6px; font-size: 12px;">
-      <strong>병렬화 영역:</strong> W2 (1.1~1.6 ∥ 1.7 CODEOWNERS+정책) · W3-W4 (2.2/2.12 ∥ 2.4~2.6) · 인증(3.2) ∥ 인프라(3.1) · 추천(3.5) ∥ 다국어(3.6) · 점주 콘솔(3.9) ∥ 푸시(3.10)
-    </div>
-  </section>
-
-  <!-- ===================== 6. MARKET TRACK ===================== -->
-  <section>
-    <h2 class="section-title">
-      <span class="num">6</span>
-      Google Play 마켓 등록 트랙
-      <span class="desc">병렬 진행 · 심사 7일 가정 + 1주 재제출 버퍼</span>
-    </h2>
-    <div class="market-list">
-      <div class="market-item">
-        <div class="mk-id">MK1</div>
-        <div class="mk-name">개발자 계정 생성</div>
-        <div class="mk-date">2026-07-18 (W12) · $25 · R1 완화 위해 2주 앞당김</div>
-      </div>
-      <div class="market-item">
-        <div class="mk-id">MK2</div>
-        <div class="mk-name">스토어 자산 준비</div>
-        <div class="mk-date">2026-08-15 (W16) · 4종 언어</div>
-      </div>
-      <div class="market-item">
-        <div class="mk-id">MK3</div>
-        <div class="mk-name">내부 테스트 트랙</div>
-        <div class="mk-date">2026-09-01 (W17) · M4 베타</div>
-      </div>
-      <div class="market-item">
-        <div class="mk-id">MK4</div>
-        <div class="mk-name">비공개 테스트 (RC)</div>
-        <div class="mk-date">2026-09-08 (W18) · M5 RC</div>
-      </div>
-      <div class="market-item">
-        <div class="mk-id">MK5</div>
-        <div class="mk-name">정식 등록 심사 제출</div>
-        <div class="mk-date">2026-09-15 (M6) · 심사 7일</div>
-      </div>
-      <div class="market-item">
-        <div class="mk-id">MK6</div>
-        <div class="mk-name">정식 등록 완료</div>
-        <div class="mk-date">2026-09-22 · 거부 시 재제출 버퍼</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== 7. RISKS ===================== -->
-  <section>
-    <h2 class="section-title">
-      <span class="num">7</span>
-      리스크 매트릭스
-      <span class="desc">영향도 × 발생 확률 매핑 · 12건</span>
-    </h2>
-    <div class="card">
-      <div class="risk-matrix">
-        <!-- Header row -->
-        <div class="header"></div>
-        <div class="header">발생 확률 낮음</div>
-        <div class="header">발생 확률 중간</div>
-        <div class="header">발생 확률 높음</div>
-
-        <!-- Impact High -->
-        <div class="y-label">영향도<br/>높음</div>
-        <div class="cell risk-cell">
-          <span class="risk-chip"><span class="risk-id">R9</span><span class="impact-high">●</span> 보안 사고</span>
-          <span class="risk-chip"><span class="risk-id">R10</span><span class="impact-high">●</span> 시연 장애</span>
-        </div>
-        <div class="cell risk-cell">
-          <span class="risk-chip"><span class="risk-id">R1</span><span class="impact-high">●</span> Play 거부</span>
-        </div>
-        <div class="cell risk-cell"></div>
-
-        <!-- Impact Mid -->
-        <div class="y-label">영향도<br/>중간</div>
-        <div class="cell risk-cell">
-          <span class="risk-chip"><span class="risk-id">R4</span><span class="impact-mid">●</span> 부하 미달</span>
-          <span class="risk-chip"><span class="risk-id">R8</span><span class="impact-mid">●</span> 인프라 비용</span>
-        </div>
-        <div class="cell risk-cell">
-          <span class="risk-chip"><span class="risk-id">R2</span><span class="impact-mid">●</span> LLM 비용</span>
-          <span class="risk-chip"><span class="risk-id">R3</span><span class="impact-mid">●</span> API 다운</span>
-          <span class="risk-chip"><span class="risk-id">R5</span><span class="impact-mid">●</span> OCR 정확도</span>
-          <span class="risk-chip"><span class="risk-id">R6</span><span class="impact-mid">●</span> 리소스 부족</span>
-          <span class="risk-chip"><span class="risk-id">R7</span><span class="impact-mid">●</span> 번역 품질</span>
-          <span class="risk-chip" style="background: #FFF3E0"><span class="risk-id" style="background: var(--mid)">R11</span><span class="impact-mid">●</span> 분업 정합</span>
-          <span class="risk-chip" style="background: #FFF3E0"><span class="risk-id" style="background: var(--mid)">R12</span><span class="impact-mid">●</span> AI 갭</span>
-        </div>
-        <div class="cell risk-cell"></div>
-
-        <!-- Impact Low -->
-        <div class="y-label">영향도<br/>낮음</div>
-        <div class="cell risk-cell"></div>
-        <div class="cell risk-cell"></div>
-        <div class="cell risk-cell"></div>
-      </div>
-
-      <table class="risk-detail-table">
-        <thead>
-          <tr>
-            <th style="width: 50px">#</th>
-            <th>리스크</th>
-            <th style="width: 70px">영향</th>
-            <th style="width: 80px">발생 확률</th>
-            <th>완화책</th>
-            <th style="width: 60px">버퍼</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td><span class="risk-id">R1</span></td><td>Google Play 등록 거부</td><td><span class="badge h">높음</span></td><td><span class="badge m">중간</span></td><td>9/15 1차 → 거부 시 9/22 재제출, 사전 정책 검토</td><td>1주</td></tr>
-          <tr><td><span class="risk-id">R2</span></td><td>LLM API 비용 초과</td><td><span class="badge m">중간</span></td><td><span class="badge m">중간</span></td><td>월간 토큰 캡, Batch API 50% 할인, 결과 캐시</td><td>—</td></tr>
-          <tr><td><span class="risk-id">R3</span></td><td>외부 API(TourAPI/식약처) 다운</td><td><span class="badge m">중간</span></td><td><span class="badge m">중간</span></td><td>DLQ + Stale 폴백 + 다중 소스</td><td>—</td></tr>
-          <tr><td><span class="risk-id">R4</span></td><td>부하 테스트 합격 미달</td><td><span class="badge m">중간</span></td><td><span class="badge l">낮음</span></td><td>W18 튜닝, W20 D6 재검증. 시니어 2인 튜닝 여력 (v0.2.0 확률 하향)</td><td>0.5주</td></tr>
-          <tr><td><span class="risk-id">R5</span></td><td>AI 렌즈 OCR 정확도 부족</td><td><span class="badge m">중간</span></td><td><span class="badge m">중간</span></td><td>OCR + 매핑 단순화, 음식 사진 식별 보류</td><td>TDR §0</td></tr>
-          <tr><td><span class="risk-id">R6</span></td><td>개발 리소스 부족</td><td><span class="badge m">중간</span></td><td><span class="badge m">중간</span></td><td><strong>풀스택 시니어 2인 투입(v0.2.0)</strong>으로 영향·확률 모두 완화. 매주 회고, RACI 분업</td><td>일정 압축</td></tr>
-          <tr><td><span class="risk-id">R7</span></td><td>다국어 번역 품질 이슈</td><td><span class="badge m">중간</span></td><td><span class="badge m">중간</span></td><td>알레르기·식이는 ISO 코드 표준화로 LLM 의존 최소화</td><td>—</td></tr>
-          <tr><td><span class="risk-id">R8</span></td><td>인프라 비용 초과</td><td><span class="badge m">중간</span></td><td><span class="badge l">낮음</span></td><td>VM 권장 사양 최소선 시작, 부하 후 확장</td><td>—</td></tr>
-          <tr><td><span class="risk-id">R9</span></td><td>보안 사고 / 개인정보 유출</td><td><span class="badge h">높음</span></td><td><span class="badge l">낮음</span></td><td>git-crypt, 로그 마스킹, 보안 스캔 CI 차단</td><td>TDR §3.4</td></tr>
-          <tr><td><span class="risk-id">R10</span></td><td>시연 당일 장애</td><td><span class="badge h">높음</span></td><td><span class="badge l">낮음</span></td><td>D-3 부하 테스트, runbooks, Blue-Green 즉시 롤백</td><td>—</td></tr>
-          <tr><td><span class="risk-id">R11</span></td><td>분업 인터페이스 정합 비용 (트랙 A↔B)</td><td><span class="badge m">중간</span></td><td><span class="badge m">중간</span></td><td>API 계약 마감, 일 15분 동기화. <strong>Free 환경 다층 완화</strong>: ① CODEOWNERS 자동 리뷰 요청(1.7) + ② CONTRIBUTING 정책 + ③ CI 검증 Action(3.1.3) + ④ 시니어 신뢰. Q9 추적</td><td>—</td></tr>
-          <tr><td><span class="risk-id">R12</span></td><td>AI 도메인 전문성 갭 (LLM/RAG/임베딩)</td><td><span class="badge m">중간</span></td><td><span class="badge m">중간</span></td><td>W3~W4 PoC 조기 종료. <strong>PoC 결과를 Base Code로 자산화(WBS 2.12)</strong></td><td>—</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- ===================== 8. PROGRESS ===================== -->
-  <section>
-    <h2 class="section-title">
-      <span class="num">8</span>
-      진척 관리 규칙
-      <span class="desc">상태 표기와 갱신 정책</span>
-    </h2>
-    <div class="card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-      <div>
-        <h3 style="margin: 0 0 10px; font-size: 14px;">📅 회고 주기</h3>
-        <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.8;">
-          <li><strong>매주 일요일</strong> · 1시간 주간 회고 (진척·블로커·다음주 계획)</li>
-          <li><strong>마일스톤 도달 시</strong> · 게이트 점검 회고 (M1~M7)</li>
-          <li>회고 결과는 본 문서 갱신 + <code>00.Meetings/</code>에 회의록 적재</li>
-        </ul>
-      </div>
-      <div>
-        <h3 style="margin: 0 0 10px; font-size: 14px;">🚦 진척 상태 표기</h3>
-        <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.8; list-style: none;">
-          <li>🟢 정상 진행</li>
-          <li>🟡 주의 (지연 위험)</li>
-          <li>🔴 지연 발생</li>
-          <li>✅ 완료 (날짜 마킹)</li>
-          <li>⏸️ 보류</li>
-        </ul>
-      </div>
-      <div style="grid-column: 1 / -1;">
-        <h3 style="margin: 0 0 10px; font-size: 14px;">📌 본 문서 갱신 정책</h3>
-        <ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.8;">
-          <li><strong>Minor 갱신:</strong> 작업 완료/지연 발생 시 ✅/⚠️ 마킹</li>
-          <li><strong>Major 갱신:</strong> 마일스톤 도달 또는 일정 재조정 시 버전 업 (v0.2.0 → v0.3.0)</li>
-          <li><strong>연동 문서:</strong> TDR / Core_Features 변경 시 본 문서 영향 검토</li>
-          <li><strong>🔁 WBS.md ↔ WBS.html 동기화 의무 (필수):</strong> WBS.md 또는 본 문서를 수정할 경우 <strong>반드시 같은 커밋에서 양 파일을 함께 갱신</strong>합니다. 한쪽만 변경된 상태로 머지·푸시 금지. 동기화 영역: 헤더 버전 · Phase 산출물 카드 · 마일스톤 · Phase 3 서브 워크스트림 · 크리티컬 패스 · 병렬화 영역 · 마켓 트랙 · 리스크 매트릭스 · 갱신 정책 본문. CSS·레이아웃 단독 수정만 예외.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    📄 연동 문서(비공개 저장소 관리): WBS.md · TDR · Core_Features.md · Requirements.md · RACI.md<br/>
-    OkeyMeal · 2026 한국관광공사 관광데이터 활용 공모전 · 데드라인 2026-09-30
-  </footer>
-
-</div>
+        // 5. Search Functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('aside nav a').forEach(a => {
+                if (a.innerText.toLowerCase().includes(term)) {
+                    a.style.display = 'block';
+                } else {
+                    a.style.display = 'none';
+                }
+            });
+            // Hide empty sections
+            document.querySelectorAll('aside > div > div').forEach(section => {
+                const nav = section.querySelector('nav');
+                const visibleLinks = nav.querySelectorAll('a[style="display: block;"], a:not([style])');
+                if (term !== '' && visibleLinks.length === 0) {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = 'block';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

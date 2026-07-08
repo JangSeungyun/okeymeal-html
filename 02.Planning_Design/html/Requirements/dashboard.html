@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Requirements Dashboard - OkeyMeal</title>
+    <script src="../../../assets/js/tailwindcss.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#0d9488', secondary: '#f0fdfa' }, fontFamily: { sans: ['Pretendard', 'sans-serif'] } } } }
+    </script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-5xl mx-auto space-y-8">
+        <header class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">요구사항 정의서 (Requirements)</h1>
+                <p class="text-slate-500 text-sm mt-1">OkeyMeal 상세 기능 및 비기능 명세 (v2.0.0)</p>
+            </div>
+            <div class="bg-teal-50 text-teal-700 px-4 py-2 rounded-lg font-bold">Total: 9 FR / 5 NFR</div>
+        </header>
+
+        <!-- B2C Requirements -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200"><h2 class="font-bold text-slate-800">B2C 기능 요구사항 (관광객용 앱)</h2></div>
+            <div class="divide-y divide-slate-100">
+                <div class="p-4 hover:bg-slate-50 flex gap-4">
+                    <div class="w-20 font-bold text-teal-600">FR-C01</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-800 mb-1">건강 프로필 설정 (Onboarding)</h3>
+                        <p class="text-sm text-slate-600">필수 온보딩 / 21종 알레르기 체크리스트 / 할랄, 비건 선택 / 언어 설정</p>
+                    </div>
+                    <div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                </div>
+                <div class="p-4 hover:bg-slate-50 flex gap-4">
+                    <div class="w-20 font-bold text-teal-600">FR-C02</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-800 mb-1">안심 식당 탐색 및 필터링</h3>
+                        <p class="text-sm text-slate-600">TourAPI 무장애 여행 매핑 / 프로필 기반 위험도 시각화 / 맞춤형 정렬(나와 같은 질환자 방문순)</p>
+                    </div>
+                    <div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                </div>
+                <div class="p-4 hover:bg-slate-50 flex gap-4">
+                    <div class="w-20 font-bold text-teal-600">FR-C03</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-800 mb-1">AI 렌즈 (메뉴판 스캐너)</h3>
+                        <p class="text-sm text-slate-600">AR 다국어 번역 및 적색 경고 / 인식 실패 시 수동·음성 입력 Fallback 지원</p>
+                    </div>
+                    <div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                </div>
+                <div class="p-4 hover:bg-slate-50 flex gap-4">
+                    <div class="w-20 font-bold text-teal-600">FR-C04</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-800 mb-1">식후 맞춤형 산책로 추천</h3>
+                        <p class="text-sm text-slate-600">식후 2km 이내 걷기 코스 추천 / 소요 시간 명시 / 구글맵 도보 네비 연동</p>
+                    </div>
+                    <div class="w-24 text-right"><span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded font-bold">Medium</span></div>
+                </div>
+                <div class="p-4 hover:bg-slate-50 flex gap-4">
+                    <div class="w-20 font-bold text-teal-600">FR-C05</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-800 mb-1">SOS 응급 상황 대처</h3>
+                        <p class="text-sm text-slate-600">최단 거리 응급실 맵핑 / 다국어 헬프 카드 전체화면 노출 및 음성 읽어주기(TTS)</p>
+                    </div>
+                    <div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                </div>
+                <!-- 신규 추가 2건 -->
+                <div class="p-4 hover:bg-slate-50 flex gap-4 bg-teal-50/30">
+                    <div class="w-20 font-bold text-teal-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C06</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-800 mb-1">오프라인 헬프 모드</h3>
+                        <p class="text-sm text-slate-600">통신 단절 시 로컬 캐시 프로필 기반 기본 알레르기 카드 및 SOS 헬프 구동</p>
+                    </div>
+                    <div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                </div>
+                <div class="p-4 hover:bg-slate-50 flex gap-4 bg-teal-50/30">
+                    <div class="w-20 font-bold text-teal-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C07</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-800 mb-1">동일 식성 커뮤니티 리뷰</h3>
+                        <p class="text-sm text-slate-600">작성자의 건강 뱃지 노출 / 스마트 필터링 / 리뷰 게이미피케이션(포인트) 제공</p>
+                    </div>
+                    <div class="w-24 text-right"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-bold">Low</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B2B Requirements -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200"><h2 class="font-bold text-slate-800">B2B 기능 요구사항 (식당 점주용)</h2></div>
+            <div class="divide-y divide-slate-100">
+                <div class="p-4 hover:bg-slate-50 flex gap-4">
+                    <div class="w-20 font-bold text-blue-600">FR-B01</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-800 mb-1">스마트 오더 뷰어 (QR 기반)</h3>
+                        <p class="text-sm text-slate-600">앱 설치 불필요. 직관적이고 큰 글씨의 한국어로 번역된 관광객 주의사항 뷰어</p>
+                    </div>
+                    <div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                </div>
+                <div class="p-4 hover:bg-slate-50 flex gap-4 bg-blue-50/30">
+                    <div class="w-20 font-bold text-blue-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-B02</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-slate-800 mb-1">원터치 다국어 퀵 리플라이</h3>
+                        <p class="text-sm text-slate-600">"재료 소진", "빼 드릴게요" 등 준비된 버튼 터치 시 관광객 모국어로 번역되어 즉시 푸시 알림 전송</p>
+                    </div>
+                    <div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Non-Functional -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200"><h2 class="font-bold text-slate-800">비기능적 요구사항 (NFR)</h2></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+                <div class="bg-rose-50 border border-rose-200 p-4 rounded-lg">
+                    <div class="flex items-center gap-2 mb-2"><span class="text-rose-600">🔒</span><h3 class="font-bold text-rose-800">보안 (Quishing)</h3></div>
+                    <p class="text-xs text-rose-700">공식 도메인(`owner.okeymeal.kr`) 강제, JWT/HMAC 동적 서명, 공식 인증 뱃지 노출.</p>
+                </div>
+                <div class="bg-rose-50 border border-rose-200 p-4 rounded-lg relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 w-12 h-12 bg-rose-200 rounded-full flex items-center justify-center opacity-50"><span class="text-[10px] font-bold text-rose-700 mt-2 mr-2">NEW</span></div>
+                    <div class="flex items-center gap-2 mb-2"><span class="text-rose-600">🛡️</span><h3 class="font-bold text-rose-800">보안 (Privacy)</h3></div>
+                    <p class="text-xs text-rose-700">GDPR 및 개인정보보호법 준수. 민감 건강 정보(PHI)는 AES-256 양방향 암호화 보관.</p>
+                </div>
+                <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-lg">
+                    <div class="flex items-center gap-2 mb-2"><span class="text-indigo-600">⚡</span><h3 class="font-bold text-indigo-800">성능 (Performance)</h3></div>
+                    <p class="text-xs text-indigo-700">AI 렌즈 E2E(End-to-End) 지연 시간 최대 3초 이내 보장.</p>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-lg relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 w-12 h-12 bg-emerald-200 rounded-full flex items-center justify-center opacity-50"><span class="text-[10px] font-bold text-emerald-700 mt-2 mr-2">NEW</span></div>
+                    <div class="flex items-center gap-2 mb-2"><span class="text-emerald-600">🌐</span><h3 class="font-bold text-emerald-800">가용성 (Reliability)</h3></div>
+                    <p class="text-xs text-emerald-700">핵심 서버 가용성 99.9% 보장 및 오프라인 모드 전환 안정성.</p>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+                    <div class="flex items-center gap-2 mb-2"><span class="text-amber-600">👓</span><h3 class="font-bold text-amber-800">사용성 (Usability)</h3></div>
+                    <p class="text-xs text-amber-700">점주용 웹은 고령층 배려 최소 24px 명조/고딕 혼용 및 고대비 색상.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

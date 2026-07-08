@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Architecture Diagrams - OkeyMeal</title>
+    <script src="../../../assets/js/tailwindcss.js"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#f0fdfa', primaryTextColor: '#0f766e', primaryBorderColor: '#0d9488', lineColor: '#94a3b8' }});
+    </script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-5xl mx-auto space-y-8">
+        <header class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <h1 class="text-2xl font-bold text-slate-800">서비스 구조도 (Architecture)</h1>
+            <p class="text-slate-500 text-sm mt-1">시스템 아키텍처 및 데이터 흐름</p>
+        </header>
+
+        <!-- AI API Comparison -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200"><h2 class="font-bold text-slate-800">💡 AI 메뉴 스캐너 API 대안 비교</h2></div>
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="border border-slate-200 rounded-lg p-5 hover:border-blue-400 transition-colors">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800 text-lg">1안. Google 생태계</h3>
+                        <span class="bg-slate-100 text-slate-500 px-2 py-1 rounded text-xs">Cloud Vision + Gemini</span>
+                    </div>
+                    <ul class="text-sm space-y-2 mb-4">
+                        <li class="flex items-start gap-2"><span class="text-blue-500">👍</span> 다국어(희귀 언어) 번역 품질 최상</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-500">👍</span> 비용 효율성 우수</li>
+                        <li class="flex items-start gap-2"><span class="text-red-400">👎</span> 로컬 노포 손글씨 한글 인식률 상대적 저조</li>
+                    </ul>
+                </div>
+                <div class="border border-teal-400 bg-teal-50 rounded-lg p-5 relative shadow-sm">
+                    <div class="absolute -top-3 -right-2 bg-teal-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">최종 제안</div>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-teal-900 text-lg">2안. Naver 생태계</h3>
+                        <span class="bg-teal-200 text-teal-800 px-2 py-1 rounded text-xs">Clova OCR + HyperCLOVA X</span>
+                    </div>
+                    <ul class="text-sm space-y-2 mb-4">
+                        <li class="flex items-start gap-2"><span class="text-teal-600">👍</span> 압도적인 한글(손글씨, 세로쓰기) OCR 성능</li>
+                        <li class="flex items-start gap-2"><span class="text-teal-600">👍</span> K-Food 식문화 맥락 이해도 최상</li>
+                        <li class="flex items-start gap-2"><span class="text-red-400">👎</span> 상대적으로 높은 비용 구조</li>
+                    </ul>
+                    <p class="text-xs text-teal-700 mt-4 font-medium border-t border-teal-200 pt-3">심사위원 시연 시 '한글 메뉴판 인식'의 정확도 리스크 최소화를 위해 2안 적극 권장</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Architecture Diagram -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                <h2 class="font-bold text-slate-800">시스템 구성도 (System Architecture)</h2>
+                <div class="flex gap-2">
+                    <button onclick="zoom('sys-diagram', 1.2)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➕ 확대</button>
+                    <button onclick="zoom('sys-diagram', 0.8)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➖ 축소</button>
+                    <button onclick="resetZoom('sys-diagram')" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">🔄 원래대로</button>
+                </div>
+            </div>
+            <div class="p-6 overflow-auto bg-slate-50 relative min-h-[400px] flex justify-center">
+                <div class="mermaid origin-top transition-transform duration-200" id="sys-diagram">
+                    graph TD
+                        subgraph Clients["Client Layer"]
+                            App["관광객용 App (Flutter)"]
+                            Web["점주용 Web (React)"]
+                        end
+                        Gateway["API Gateway (AWS)"]
+                        subgraph Backend["Backend Layer (Spring Boot)"]
+                            AuthSvc["Auth Svc"]
+                            TourSvc["Tour Svc"]
+                            AISvc["AI Svc"]
+                            OrderSvc["Order Svc"]
+                        end
+                        subgraph Data["Data Layer"]
+                            DB[(PostgreSQL)]
+                            Cache[(Redis)]
+                        end
+                        subgraph External["External APIs"]
+                            TourAPI["한국관광공사"]
+                            FoodAPI["식약처"]
+                            AI["Naver Clova & HyperCLOVA"]
+                        end
+
+                        App --> Gateway
+                        Web --> Gateway
+                        Gateway --> AuthSvc
+                        Gateway --> TourSvc
+                        Gateway --> AISvc
+                        Gateway --> OrderSvc
+                        
+                        AuthSvc --> DB
+                        OrderSvc --> DB
+                        OrderSvc --> Cache
+                        TourSvc -.-> TourAPI
+                        AISvc -.-> FoodAPI
+                        AISvc -.-> AI
+                </div>
+            </div>
+        </section>
+        
+        <!-- Data Flow Diagram -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                <h2 class="font-bold text-slate-800">AI 스캐너 및 QR 오더 데이터 흐름도</h2>
+                <div class="flex gap-2">
+                    <button onclick="zoom('flow-diagram', 1.2)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➕ 확대</button>
+                    <button onclick="zoom('flow-diagram', 0.8)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➖ 축소</button>
+                    <button onclick="resetZoom('flow-diagram')" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">🔄 원래대로</button>
+                </div>
+            </div>
+            <div class="p-6 overflow-auto bg-slate-50 relative min-h-[400px] flex justify-center">
+                <div class="mermaid origin-top transition-transform duration-200" id="flow-diagram">
+                    sequenceDiagram
+                        actor Tourist as 관광객(App)
+                        participant AISvc as AI Service
+                        participant NaverAPI as Naver Clova API
+                        actor Owner as 점주(Web)
+
+                        Tourist->>AISvc: 메뉴판 사진 + 사용자 알레르기 전송
+                        AISvc->>NaverAPI: 이미지 OCR 요청
+                        NaverAPI-->>AISvc: 한글 텍스트 추출 반환
+                        AISvc->>NaverAPI: 번역 및 위험 성분 추론 요청
+                        NaverAPI-->>AISvc: 위험 성분(땅콩) 검출 반환
+                        AISvc-->>Tourist: 위험 메뉴 적색 경고 렌더링
+                        
+                        Tourist->>AISvc: 안전 메뉴 주문 및 QR 생성
+                        AISvc-->>Tourist: HMAC 서명된 QR 코드 발급
+                        
+                        Tourist->>Owner: 점주에게 QR 코드 제시
+                        Owner->>AISvc: QR 스캔 (URL 접속)
+                        AISvc->>AISvc: 서명(Token) 유효성 검증
+                        AISvc-->>Owner: 번역된 주문서 웹뷰 렌더링 (안심 뱃지 표기)
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        const zoomLevels = {};
+        function zoom(id, factor) {
+            if(!zoomLevels[id]) zoomLevels[id] = 1;
+            zoomLevels[id] *= factor;
+            const el = document.getElementById(id);
+            if (el) el.style.transform = `scale(${zoomLevels[id]})`;
+        }
+        function resetZoom(id) {
+            zoomLevels[id] = 1;
+            const el = document.getElementById(id);
+            if (el) el.style.transform = `scale(1)`;
+        }
+    </script>
+</body>
+</html>
