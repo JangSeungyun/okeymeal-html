@@ -105,5 +105,4 @@ git push
 Pop-Location
 
 Write-Host "모든 동기화 및 배포 작업이 성공적으로 완료되었습니다! 🎉" -ForegroundColor Green
-Write-Host "아무 키나 누르면 창이 닫힙니다..."
-$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+# 실행 완료 시 자동으로 닫힙니다.
