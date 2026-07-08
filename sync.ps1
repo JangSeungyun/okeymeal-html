@@ -27,7 +27,7 @@ Write-Host "1. 파일을 복사하는 중..." -ForegroundColor Yellow
 $robocopyArgs = @(
     $sourceDir, $destDir, "/MIR",
     "/XD", ".git", 
-    "/XF", "index.html", "dashboard.html", "sync_history.md", "sync.ps1", "README.md"
+    "/XF", (Join-Path $destDir "index.html"), (Join-Path $destDir "dashboard.html"), (Join-Path $destDir "sync_history.md"), (Join-Path $destDir "sync.ps1"), (Join-Path $destDir "README.md")
 )
 & robocopy @robocopyArgs | Out-Null
 

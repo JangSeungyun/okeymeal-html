@@ -26,7 +26,7 @@ status: Draft
 
 | 항목 | 내용 |
 | :--- | :--- |
-| **기능 ID / 기능명** | `FEAT-AUTH-01` / **건강 프로필 온보딩 및 로컬 캐싱** |
+| **기능 ID / 기능명** | `FEAT-AUTH-01` / **건강 프로필 온보딩** |
 | **요구사항 연동** | FR-C01, FR-C06, NFR-S02 |
 | **선결 작업** | [없음] 앱 구동 시 최초 진입 기능 |
 | **UI/UX 요건** | 21종 알레르기/질환 체크리스트, 언어 설정 스피너, 오프라인용 SOS 헬프카드 화면 |
@@ -34,6 +34,24 @@ status: Draft
 | **DB 스키마** | `users` (id, email, password)<br>`user_profiles` (user_id, encrypted_health_data, language_code) |
 | **API 연동** | `POST /api/v1/auth/profile` (내부 API) |
 | **관리 정보** | 담당자: [미정] \| 상태: Todo \| 예상 공수(M/D): 3.0 |
+
+| 항목 | 내용 |
+| :--- | :--- |
+| **기능 ID / 기능명** | `FEAT-AUTH-02` / **일반 회원가입 및 로그인** |
+| **요구사항 연동** | FR-C12 |
+| **선결 작업** | [없음] |
+| **상세 구현 계획** | 1. 이메일/비밀번호 기반 계정 생성 (Spring Security BCrypt 암호화).<br>2. 이메일 인증 코드를 통한 비밀번호 찾기.<br>3. JWT Access/Refresh Token 발급 및 Redis 기반 로그아웃/블랙리스트 관리. |
+| **DB 스키마** | `users` (id, email, password, role, status) |
+| **관리 정보** | 담당자: [미정] \| 상태: Todo \| 예상 공수(M/D): 3.5 |
+
+| 항목 | 내용 |
+| :--- | :--- |
+| **기능 ID / 기능명** | `FEAT-AUTH-03` / **소셜 간편 로그인 (OAuth 2.0)** |
+| **요구사항 연동** | FR-C13 |
+| **선결 작업** | `FEAT-AUTH-02` (User 엔티티 설계) |
+| **상세 구현 계획** | 1. Google, Apple, Naver, Kakao 로그인 API 연동.<br>2. Spring Security OAuth2 Client를 활용하여 소셜 식별자 매핑 후 자체 JWT 발급. |
+| **DB 스키마** | `user_socials` (id, user_id, provider, provider_id) |
+| **관리 정보** | 담당자: [미정] \| 상태: Todo \| 예상 공수(M/D): 4.0 |
 
 ### 2.2. [TOUR] 위치/관광 모듈
 
@@ -141,4 +159,22 @@ status: Draft
 | **선결 작업** | `FEAT-CS-02` |
 | **상세 구현 계획** | 1:1 문의 답변 등록 시 FCM 푸시 알림 연동 발송. 회원 정지/탈퇴 처리 및 개인정보 동의 이력 강제 열람 권한. |
 | **DB 스키마** | `inquiries`, `users`, `user_consents` |
+| **관리 정보** | 담당자: [미정] \| 상태: Todo \| 예상 공수(M/D): 3.0 |
+
+| 항목 | 내용 |
+| :--- | :--- |
+| **기능 ID / 기능명** | `FEAT-ADMIN-04` / **통합 회원 관리 시스템** |
+| **요구사항 연동** | FR-A05 |
+| **선결 작업** | `FEAT-AUTH-02` |
+| **상세 구현 계획** | B2C/B2B 전체 회원 목록 조회(JPA Specification 동적 쿼리). 악성 유저 활동 정지(Status 변경) 및 역할 부여(ADMIN, USER, OWNER) 제어 API 구현. |
+| **DB 스키마** | `users` 업데이트 |
+| **관리 정보** | 담당자: [미정] \| 상태: Todo \| 예상 공수(M/D): 2.5 |
+
+| 항목 | 내용 |
+| :--- | :--- |
+| **기능 ID / 기능명** | `FEAT-ADMIN-05` / **시스템 마스터 데이터 관리** |
+| **요구사항 연동** | FR-A06 |
+| **선결 작업** | 전체 시스템 기본 세팅 완료 후 |
+| **상세 구현 계획** | 앱 강제 업데이트 유도용 버전 관리(Version Control) API 구현, 공지사항 CRUD, 약관 버전 관리, 금칙어 사전 DB 연동. |
+| **DB 스키마** | `app_versions`, `notices`, `terms`, `banned_words` |
 | **관리 정보** | 담당자: [미정] \| 상태: Todo \| 예상 공수(M/D): 3.0 |
