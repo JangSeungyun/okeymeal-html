@@ -5,8 +5,10 @@
 # 깃허브에 자동으로 배포하는 스크립트입니다.
 # =====================================================================
 
-$sourceDir = "C:\workspace_personal\1.projects\OkeyMeal\documents"
-$destDir = "C:\workspace_personal\1.projects\okeymeal-html"
+# 스크립트가 실행되는 현재 폴더 위치 (okeymeal-html)
+$destDir = $PSScriptRoot
+# 현재 위치를 기준으로 상대 경로 계산 (상위 폴더 -> OkeyMeal -> documents)
+$sourceDir = [System.IO.Path]::GetFullPath((Join-Path $destDir "..\OkeyMeal\documents"))
 
 Write-Host "동기화를 시작합니다..." -ForegroundColor Cyan
 
