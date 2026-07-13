@@ -17,16 +17,16 @@
         <header class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold text-slate-800">요구사항 정의서 (Requirements)</h1>
-                <p class="text-slate-500 text-sm mt-1">OkeyMeal 상세 기능 및 비기능 명세 (v2.3.0 - 공통코드/다국어 배너 추가)</p>
+                <p class="text-slate-500 text-sm mt-1">OkeyMeal 상세 기능 및 비기능 명세 (v2.4.0 - 공공데이터 API 확장)</p>
             </div>
-            <div class="bg-teal-50 text-teal-700 px-4 py-2 rounded-lg font-bold">Total: 20 FR / 4 NFR</div>
+            <div class="bg-teal-50 text-teal-700 px-4 py-2 rounded-lg font-bold">Total: 26 FR / 4 NFR</div>
         </header>
 
         <!-- B2C Requirements -->
         <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
-                <h2 class="font-bold text-slate-800">B2C 기능 요구사항 (관광객용 앱 및 커뮤니티)</h2>
-                <span class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded">13건</span>
+            <div class="bg-blue-50 px-6 py-4 border-b border-blue-100 flex justify-between items-center">
+                <h2 class="font-bold text-blue-900">B2C 기능 요구사항 (관광객용 앱)</h2>
+                <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">17건</span>
             </div>
             <div class="divide-y divide-slate-100">
                 <div class="p-4 hover:bg-slate-50 flex gap-4"><div class="w-20 font-bold text-teal-600">FR-C01</div><div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">건강 프로필 설정 (Onboarding)</h3><p class="text-sm text-slate-600">필수 온보딩 / 21종 알레르기 체크리스트 / 할랄, 비건 선택 / 언어 설정</p></div><div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div></div>
@@ -36,37 +36,39 @@
                 <div class="p-4 hover:bg-slate-50 flex gap-4"><div class="w-20 font-bold text-teal-600">FR-C05</div><div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">SOS 응급 상황 대처</h3><p class="text-sm text-slate-600">최단 거리 응급실 맵핑 / 다국어 헬프 카드 전체화면 노출</p></div><div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div></div>
                 <div class="p-4 hover:bg-slate-50 flex gap-4"><div class="w-20 font-bold text-teal-600">FR-C06</div><div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">오프라인 헬프 모드</h3><p class="text-sm text-slate-600">통신 단절 시 로컬 캐시 기반 기본 알레르기 카드 구동</p></div><div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div></div>
                 <div class="p-4 hover:bg-slate-50 flex gap-4"><div class="w-20 font-bold text-teal-600">FR-C07</div><div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">동일 식성 커뮤니티 리뷰</h3><p class="text-sm text-slate-600">건강 뱃지 노출 / 리뷰 게이미피케이션</p></div><div class="w-24 text-right"><span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-bold">Low</span></div></div>
-                
-                <!-- CS 추가 -->
-                <div class="p-4 hover:bg-slate-50 flex gap-4 bg-teal-50/30">
-                    <div class="w-20 font-bold text-teal-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C08</div>
-                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">게시판 커뮤니티</h3><p class="text-sm text-slate-600">자유로운 정보 공유 및 지역별 꿀팁 나눔 게시판</p></div>
+                <div class="p-4 hover:bg-slate-50 flex gap-4"><div class="w-20 font-bold text-teal-600">FR-C08</div><div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">게시판 커뮤니티</h3><p class="text-sm text-slate-600">자유로운 정보 공유 및 지역별 꿀팁 나눔 게시판</p></div><div class="w-24 text-right"><span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded font-bold">Medium</span></div></div>
+                <div class="p-4 hover:bg-slate-50 flex gap-4"><div class="w-20 font-bold text-teal-600">FR-C09</div><div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">자주 묻는 질문 (FAQ)</h3><p class="text-sm text-slate-600">이용 방법 및 오류 대처법 안내</p></div><div class="w-24 text-right"><span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded font-bold">Medium</span></div></div>
+                <div class="p-4 hover:bg-slate-50 flex gap-4"><div class="w-20 font-bold text-teal-600">FR-C10</div><div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">1:1 문의 (CS)</h3><p class="text-sm text-slate-600">오류 신고 및 불만 사항 접수 창구</p></div><div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div></div>
+                <div class="p-4 hover:bg-slate-50 flex gap-4"><div class="w-20 font-bold text-teal-600">FR-C11</div><div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">개인정보 동의 관리</h3><p class="text-sm text-slate-600">약관 동의 및 철회 관리 (GDPR 대응)</p></div><div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div></div>
+                <div class="p-4 hover:bg-blue-50/50 flex gap-4">
+                    <div class="w-20 font-bold text-blue-600">FR-C12</div>
+                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">회원가입 및 일반 로그인</h3><p class="text-sm text-slate-600">이메일/비밀번호 기반 계정 생성, 비밀번호 찾기(이메일 인증), JWT 기반 로그인</p></div>
+                    <div class="w-24 text-right"><span class="bg-rose-100 text-rose-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                </div>
+                <div class="p-4 hover:bg-blue-50/50 flex gap-4">
+                    <div class="w-20 font-bold text-blue-600">FR-C13</div>
+                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">소셜 간편 로그인 연동</h3><p class="text-sm text-slate-600">구글, 애플, 네이버, 카카오 OAuth 2.0 기반 원터치 가입/로그인</p></div>
+                    <div class="w-24 text-right"><span class="bg-rose-100 text-rose-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                </div>
+                <div class="p-4 hover:bg-blue-50/50 flex gap-4 bg-blue-50/20">
+                    <div class="w-20 font-bold text-blue-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C14</div>
+                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">가공식품 바코드 알레르기 판별</h3><p class="text-sm text-slate-600">식약처 공공 API 활용 마트/편의점 식품 스캔 시 알레르기 경고 제공</p></div>
+                    <div class="w-24 text-right"><span class="bg-rose-100 text-rose-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                </div>
+                <div class="p-4 hover:bg-blue-50/50 flex gap-4 bg-blue-50/20">
+                    <div class="w-20 font-bold text-blue-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C15</div>
+                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">비상 SOS 및 심야 약국 안내</h3><p class="text-sm text-slate-600">보건복지부 응급의료기관 API 위치기반 응급실 안내 및 다국어 헬프 카드</p></div>
+                    <div class="w-24 text-right"><span class="bg-rose-100 text-rose-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                </div>
+                <div class="p-4 hover:bg-blue-50/50 flex gap-4 bg-blue-50/20">
+                    <div class="w-20 font-bold text-blue-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C16</div>
+                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">무장애 및 특수식이 탐색</h3><p class="text-sm text-slate-600">무장애 관광정보 및 안심식당 연계 휠체어/비건/할랄 식당 필터 제공</p></div>
                     <div class="w-24 text-right"><span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded font-bold">Medium</span></div>
                 </div>
-                <div class="p-4 hover:bg-slate-50 flex gap-4 bg-teal-50/30">
-                    <div class="w-20 font-bold text-teal-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C09</div>
-                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">자주 묻는 질문 (FAQ)</h3><p class="text-sm text-slate-600">이용 방법 및 오류 대처법 안내</p></div>
-                    <div class="w-24 text-right"><span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded font-bold">Medium</span></div>
-                </div>
-                <div class="p-4 hover:bg-slate-50 flex gap-4 bg-teal-50/30">
-                    <div class="w-20 font-bold text-teal-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C10</div>
-                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">1:1 문의 (CS)</h3><p class="text-sm text-slate-600">오류 신고 및 불만 사항 접수 창구</p></div>
-                    <div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
-                </div>
-                <div class="p-4 hover:bg-slate-50 flex gap-4 bg-teal-50/30">
-                    <div class="w-20 font-bold text-teal-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C11</div>
-                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">개인정보 동의 관리</h3><p class="text-sm text-slate-600">약관 동의 및 철회 관리 (GDPR 대응)</p></div>
-                    <div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
-                </div>
-                <div class="p-4 hover:bg-slate-50 flex gap-4 bg-teal-50/30">
-                    <div class="w-20 font-bold text-teal-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C12</div>
-                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">회원가입 및 일반 로그인</h3><p class="text-sm text-slate-600">이메일 계정 생성 및 JWT 인증 기반 로그인</p></div>
-                    <div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
-                </div>
-                <div class="p-4 hover:bg-slate-50 flex gap-4 bg-teal-50/30">
-                    <div class="w-20 font-bold text-teal-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C13</div>
-                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">소셜 간편 로그인</h3><p class="text-sm text-slate-600">Google, Apple, Naver, Kakao OAuth 2.0 연동</p></div>
-                    <div class="w-24 text-right"><span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">High</span></div>
+                <div class="p-4 hover:bg-blue-50/50 flex gap-4 bg-blue-50/20">
+                    <div class="w-20 font-bold text-blue-600 flex items-center gap-1"><span class="text-amber-500 text-xs">★</span>FR-C17</div>
+                    <div class="flex-1"><h3 class="font-bold text-slate-800 mb-1">식후 다국어 관광지 추천 큐레이션</h3><p class="text-sm text-slate-600">TourAPI 연동 반경 2km 걷기 좋은 길 및 주변 명소 추천</p></div>
+                    <div class="w-24 text-right"><span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded font-bold">Low</span></div>
                 </div>
             </div>
         </section>

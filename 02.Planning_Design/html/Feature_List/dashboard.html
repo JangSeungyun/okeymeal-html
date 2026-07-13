@@ -17,11 +17,11 @@
         <header class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold text-slate-800">기능 목록 명세서 (Feature List)</h1>
-                <p class="text-slate-500 text-sm mt-1">시스템 아키텍처 기반 모듈 분류 및 상세 WBS 도출 (v1.3.0 - 공통코드/다국어 배너 추가)</p>
+                <p class="text-slate-500 text-sm mt-1">시스템 아키텍처 기반 모듈 분류 및 상세 WBS 도출 (v1.4.0 - 공공데이터 API 확장)</p>
             </div>
             <div class="flex gap-3">
                 <div class="bg-slate-100 text-slate-700 px-4 py-2 rounded-lg font-bold flex flex-col items-center"><span class="text-xs font-normal">총 모듈</span>6개</div>
-                <div class="bg-teal-50 text-teal-700 px-4 py-2 rounded-lg font-bold flex flex-col items-center"><span class="text-xs font-normal">총 투입(M/D)</span>62.0</div>
+                <div class="bg-teal-50 text-teal-700 px-4 py-2 rounded-lg font-bold flex flex-col items-center"><span class="text-xs font-normal">총 투입(M/D)</span>68.0</div>
             </div>
         </header>
 
@@ -154,25 +154,26 @@
                                     <div class="flex flex-wrap gap-1 mb-2">
                                         <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[10px]">FR-C02</span>
                                         <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[10px]">FR-C07</span>
+                                        <span class="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded text-[10px] font-bold">FR-C16</span>
                                     </div>
                                     <div class="text-xs text-slate-500 font-medium bg-rose-50 text-rose-600 p-1.5 rounded inline-block">선결: AUTH-01</div>
                                 </td>
                                 <td class="p-4 align-top">
-                                    <h3 class="font-bold text-slate-800 text-base mb-2">맞춤형 안심 식당 및 리뷰 탐색</h3>
+                                    <h3 class="font-bold text-slate-800 text-base mb-2 flex items-center gap-1"><span class="text-amber-500 text-sm">★</span>맞춤형 안심 식당 및 리뷰 탐색</h3>
                                     <ul class="text-slate-600 space-y-1 list-disc list-inside">
-                                        <li>TourAPI 좌표 맵핑 및 PostGIS 공간 연산 반경 5km 검색</li>
+                                        <li>TourAPI 및 지자체 API 연동 무장애(Barrier-Free) 및 비건/할랄 특화 필터 제공</li>
                                         <li>위험도 교차 검증 로직 구현 및 React Query를 통한 상태 캐싱</li>
                                         <li>리뷰 쿼리 시 JPA 연관관계(user_profiles) 조인으로 스마트 필터링</li>
                                     </ul>
                                 </td>
                                 <td class="p-4 align-top">
                                     <div class="text-xs bg-emerald-50 text-emerald-700 p-2 rounded mb-1">TBL: `restaurants`, `reviews`</div>
-                                    <div class="text-xs bg-blue-50 text-blue-700 p-2 rounded">TourAPI (Ext)</div>
+                                    <div class="text-xs bg-blue-50 text-blue-700 p-2 rounded">TourAPI, 지자체 API</div>
                                 </td>
-                                <td class="p-4 align-top text-center font-bold text-slate-700">4.5</td>
+                                <td class="p-4 align-top text-center font-bold text-slate-700">5.5</td>
                                 <td class="p-4 align-top text-center"><span class="bg-slate-200 text-slate-600 px-2 py-1 rounded text-xs font-bold">Todo</span></td>
                             </tr>
-                            <tr class="hover:bg-slate-50">
+                            <tr class="hover:bg-slate-50 bg-amber-50/20">
                                 <td class="p-4 align-top">
                                     <div class="font-bold text-teal-700 mb-1">FEAT-TOUR-02</div>
                                     <div class="text-xs text-slate-500">👤 미정</div>
@@ -181,21 +182,23 @@
                                     <div class="flex flex-wrap gap-1 mb-2">
                                         <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[10px]">FR-C04</span>
                                         <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[10px]">FR-C05</span>
+                                        <span class="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded text-[10px] font-bold">FR-C15</span>
+                                        <span class="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded text-[10px] font-bold">FR-C17</span>
                                     </div>
                                     <div class="text-xs text-slate-500 font-medium bg-slate-100 p-1.5 rounded inline-block">선결: 없음</div>
                                 </td>
                                 <td class="p-4 align-top">
-                                    <h3 class="font-bold text-slate-800 text-base mb-2">식후 산책로 추천 및 SOS 연계</h3>
+                                    <h3 class="font-bold text-slate-800 text-base mb-2 flex items-center gap-1"><span class="text-amber-500 text-sm">★</span>식후 주변 명소 큐레이션 및 SOS 연계</h3>
                                     <ul class="text-slate-600 space-y-1 list-disc list-inside">
-                                        <li>식후 도보 길찾기 앱 딥링크(URL Scheme) 연동</li>
-                                        <li>구글 Places API 기반 최단거리 응급실 맵핑</li>
+                                        <li>TourAPI 다국어 관광정보 호출을 통한 주변 명소 큐레이션 및 딥링크 생성</li>
+                                        <li>보건복지부 응급의료기관 API 연동, 아나필락시스 비상 SOS 및 심야 약국 맵핑</li>
                                     </ul>
                                 </td>
                                 <td class="p-4 align-top">
                                     <div class="text-xs bg-emerald-50 text-emerald-700 p-2 rounded mb-1">TBL: 불필요 (Stateless)</div>
-                                    <div class="text-xs bg-blue-50 text-blue-700 p-2 rounded">Google Places API</div>
+                                    <div class="text-xs bg-blue-50 text-blue-700 p-2 rounded">TourAPI, 보건복지부 API</div>
                                 </td>
-                                <td class="p-4 align-top text-center font-bold text-slate-700">3.0</td>
+                                <td class="p-4 align-top text-center font-bold text-slate-700">4.5</td>
                                 <td class="p-4 align-top text-center"><span class="bg-slate-200 text-slate-600 px-2 py-1 rounded text-xs font-bold">Todo</span></td>
                             </tr>
                         </tbody>
@@ -245,6 +248,31 @@
                                     <div class="text-xs bg-blue-50 text-blue-700 p-2 rounded">Naver AI APIs</div>
                                 </td>
                                 <td class="p-4 align-top text-center font-bold text-slate-700">7.0</td>
+                                <td class="p-4 align-top text-center"><span class="bg-slate-200 text-slate-600 px-2 py-1 rounded text-xs font-bold">Todo</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 bg-amber-50/20">
+                                <td class="p-4 align-top">
+                                    <div class="font-bold text-indigo-700 mb-1">FEAT-AI-02</div>
+                                    <div class="text-xs text-slate-500">👤 미정</div>
+                                </td>
+                                <td class="p-4 align-top">
+                                    <div class="flex flex-wrap gap-1 mb-2">
+                                        <span class="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded text-[10px] font-bold">FR-C14</span>
+                                    </div>
+                                    <div class="text-xs text-slate-500 font-medium bg-rose-50 text-rose-600 p-1.5 rounded inline-block">선결: AUTH-01</div>
+                                </td>
+                                <td class="p-4 align-top">
+                                    <h3 class="font-bold text-slate-800 text-base mb-2 flex items-center gap-1"><span class="text-amber-500 text-sm">★</span>가공식품 바코드 알레르기 판별</h3>
+                                    <ul class="text-slate-600 space-y-1 list-disc list-inside">
+                                        <li>식약처 식품영양/바코드 오픈 API 연동을 통한 원재료 정보 수신</li>
+                                        <li>사용자 알레르기 정보 대조 및 다국어 팝업 경고 노출</li>
+                                    </ul>
+                                </td>
+                                <td class="p-4 align-top">
+                                    <div class="text-xs bg-emerald-50 text-emerald-700 p-2 rounded mb-1">TBL: `scan_logs`</div>
+                                    <div class="text-xs bg-blue-50 text-blue-700 p-2 rounded">식약처 바코드 API</div>
+                                </td>
+                                <td class="p-4 align-top text-center font-bold text-slate-700">3.5</td>
                                 <td class="p-4 align-top text-center"><span class="bg-slate-200 text-slate-600 px-2 py-1 rounded text-xs font-bold">Todo</span></td>
                             </tr>
                         </tbody>
