@@ -1,8 +1,16 @@
 ---
-title: 프로젝트 현황 컨텍스트 (AI 핸드오프 문서)
+title: "[DEPRECATED] 프로젝트 현황 컨텍스트 (구 공모전 ① 부문 아카이브)"
 version: v1.24.0
 last_updated: 2026-05-19
 author: 숭늉
+status: Archived
+---
+
+> # ⛔ DEPRECATED — 이 문서를 인수인계에 사용하지 마십시오
+> 본 문서는 **이전 공모전(① 웹·앱 개발 부문)** 시기의 현황 문서로, 폐기된 폴더 구조(`02.Planning/`·`04.Design/`·`01.Ideation/`)와 폐기된 기술 스택(LLM 미확정·Google Maps Main·Capacitor 등)을 담고 있어 현재 ②-2 웹·앱 구현 부문(과제 5번)과 **일치하지 않습니다**.
+> **현재 정본 인수인계 문서**: [`documents/handover_state.md`](../handover_state.md).
+> 아래 내용은 history 보존 목적으로만 남겨둡니다. (2026-07-14 아카이브 이동)
+
 ---
 
 # 🔄 OkeyMeal 프로젝트 현황 컨텍스트

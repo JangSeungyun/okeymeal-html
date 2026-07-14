@@ -9,7 +9,7 @@
 2.  **`Frontend_Component_Guide.md` (프론트엔드 컴포넌트 가이드)**
     *   재사용 가능한 UI 컴포넌트 목록 및 상태 관리(Zustand) 명세.
 3.  **`AI_Module_Integration.md` (AI 모듈 통합 명세서)**
-    *   메뉴판 OCR 결과 분석 로직 및 Gemini 프롬프트 설계 명세.
+    *   메뉴판 OCR(Naver Clova OCR) 결과 분석 로직 및 HyperCLOVA X(Spring AI) 프롬프트 설계 명세.
 4.  **`Troubleshooting_Log.md` (이슈 및 트러블슈팅 로그)**
     *   개발 중 발생한 주요 버그, 의존성 충돌 및 해결 과정 기록.
 

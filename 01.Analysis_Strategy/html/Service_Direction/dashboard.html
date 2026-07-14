@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Service Direction - OkeyMeal</title>
+    <script src="../../../assets/js/tailwindcss.js"></script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-5xl mx-auto space-y-8">
+        <header class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex justify-between items-start">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">🎯 서비스 방향성 및 차별화 전략</h1>
+                <p class="text-slate-500 text-sm mt-1">과제 5번 · 안심 미식 케어 플랫폼 OkeyMeal</p>
+            </div>
+            <div class="text-right shrink-0">
+                <span class="inline-block bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full font-medium">v0.1.0 · Draft</span>
+                <p class="text-xs text-slate-400 mt-1">2026-07-14</p>
+            </div>
+        </header>
+
+        <!-- Value Proposition -->
+        <section class="bg-gradient-to-br from-teal-600 to-emerald-600 rounded-xl p-8 shadow-sm text-white">
+            <p class="text-xs font-semibold uppercase tracking-wider text-teal-100">Value Proposition</p>
+            <p class="text-xl md:text-2xl font-bold mt-3 leading-relaxed">"언어와 식이 제한의 장벽을 넘어,<br>만성질환자·식이제한 관광객이 누구나 안전하게 즐기는 K-푸드 케어 플랫폼"</p>
+            <p class="text-sm text-teal-50 mt-4">안심 식당 매칭 → AI 렌즈 성분 경고 → 식후 산책 코스 연계의 <span class="font-semibold underline decoration-teal-300">End-to-End 웰니스 경험</span></p>
+        </section>
+
+        <!-- 차별화 표 -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200"><h2 class="font-bold text-slate-800">🆚 경쟁사 대비 차별점</h2></div>
+            <div class="p-6 overflow-x-auto">
+                <table class="table-auto w-full text-sm border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-600 text-left">
+                            <th class="p-3 font-semibold">구분</th>
+                            <th class="p-3 font-semibold">일반 맛집 앱</th>
+                            <th class="p-3 font-semibold">식이 특화 해외 앱</th>
+                            <th class="p-3 font-semibold text-teal-700">OkeyMeal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-semibold">다국어(ko/en/ja/zh)</td><td class="p-3 text-slate-500">부분적</td><td class="p-3 text-slate-500">영어 위주</td><td class="p-3 font-semibold text-teal-700">4개국어 3계층 i18n</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-semibold">메뉴판 성분 분석</td><td class="p-3 text-rose-400">✗</td><td class="p-3 text-slate-500">베타 수준</td><td class="p-3 font-semibold text-teal-700">Naver Clova OCR + HyperCLOVA X</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-semibold">만성질환(당뇨·고혈압)</td><td class="p-3 text-rose-400">✗</td><td class="p-3 text-slate-500">일부</td><td class="p-3 font-semibold text-teal-700">저당/저염 + 식후 산책 연계</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-semibold">점주(B2B) 소통</td><td class="p-3 text-rose-400">✗</td><td class="p-3 text-rose-400">✗</td><td class="p-3 font-semibold text-teal-700">QR 퀵 리플라이(앱 설치 불필요)</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-semibold">공공데이터 활용</td><td class="p-3 text-slate-500">낮음</td><td class="p-3 text-rose-400">✗</td><td class="p-3 font-semibold text-teal-700">TourAPI·식약처·보건복지부 융합</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- KPI -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200"><h2 class="font-bold text-slate-800">📈 서비스 성공 지표 (KPI)</h2></div>
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="border border-slate-200 rounded-lg p-4 flex items-center gap-4">
+                    <div class="text-2xl">🏆</div>
+                    <div><p class="font-bold text-slate-800">데이터 활용 적절성 20점</p><p class="text-xs text-slate-500">TourAPI 필수 활용 — 만점 지향</p></div>
+                </div>
+                <div class="border border-slate-200 rounded-lg p-4 flex items-center gap-4">
+                    <div class="text-2xl">⚡</div>
+                    <div><p class="font-bold text-slate-800">AI 렌즈 E2E ≤ 3초</p><p class="text-xs text-slate-500">NFR-P01 · Virtual Threads</p></div>
+                </div>
+                <div class="border border-slate-200 rounded-lg p-4 flex items-center gap-4">
+                    <div class="text-2xl">🩺</div>
+                    <div><p class="font-bold text-slate-800">SOS 도달 100%</p><p class="text-xs text-slate-500">오프라인 헬프모드 포함</p></div>
+                </div>
+                <div class="border border-slate-200 rounded-lg p-4 flex items-center gap-4">
+                    <div class="text-2xl">🏪</div>
+                    <div><p class="font-bold text-slate-800">점주 온보딩 앱 설치 0</p><p class="text-xs text-slate-500">QR 스캔 즉시 사용</p></div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

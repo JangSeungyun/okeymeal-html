@@ -184,3 +184,10 @@ sequenceDiagram
     AISvc->>AISvc: 서명(Token) 유효성 검증
     AISvc-->>Owner: 번역된 주문서 웹뷰 렌더링 (안심 뱃지 표기)
 ```
+
+---
+
+## 📝 변경 이력
+| 버전 | 날짜 | 변경 내용 | 작성자 |
+|---|---|---|---|
+| v2.0.0 | 2026-07-08 | 최초 작성 — 핵심 기술 스택(React 19/Vanilla CSS Modules, Spring Boot 4.1/JDK25), 멀티모듈 구조, AI 스택 2안(Naver Clova OCR + HyperCLOVA X) 최종 채택, 시스템 구성도·데이터 흐름도 정의 | 숭늉 |

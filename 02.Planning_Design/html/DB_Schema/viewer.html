@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>DB Schema - OkeyMeal</title>
+    <script src="../../../assets/js/tailwindcss.js"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#f0fdfa', primaryTextColor: '#0f766e', primaryBorderColor: '#0d9488', lineColor: '#94a3b8' }});
+    </script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-5xl mx-auto space-y-8">
+        <header class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex justify-between items-start">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">🗄️ 데이터베이스 설계서 (DB Schema)</h1>
+                <p class="text-slate-500 text-sm mt-1">Feature_List 산재 테이블 통합 ERD · PostgreSQL(JSONB·PostGIS) + Redis</p>
+            </div>
+            <div class="text-right shrink-0">
+                <span class="inline-block bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full font-medium">v0.1.0 · Draft</span>
+                <p class="text-xs text-slate-400 mt-1">2026-07-14</p>
+            </div>
+        </header>
+
+        <!-- KPI: 저장소 요약 -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+                <p class="text-3xl font-bold text-teal-600">17</p>
+                <p class="text-xs text-slate-500 mt-1">영속 테이블 (PostgreSQL)</p>
+            </div>
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+                <p class="text-3xl font-bold text-rose-500">AES-256</p>
+                <p class="text-xs text-slate-500 mt-1">건강정보(PHI) 암호화</p>
+            </div>
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+                <p class="text-3xl font-bold text-indigo-600">PostGIS</p>
+                <p class="text-xs text-slate-500 mt-1">반경 5km 공간 검색</p>
+            </div>
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+                <p class="text-3xl font-bold text-orange-500">Redis</p>
+                <p class="text-xs text-slate-500 mt-1">QR 토큰·세션·통계 캐시</p>
+            </div>
+        </section>
+
+        <!-- ERD -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                <h2 class="font-bold text-slate-800">ERD (Entity Relationship Diagram)</h2>
+                <div class="flex gap-2">
+                    <button onclick="zoom('erd', 1.2)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➕ 확대</button>
+                    <button onclick="zoom('erd', 0.8)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➖ 축소</button>
+                    <button onclick="resetZoom('erd')" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">🔄 원래대로</button>
+                </div>
+            </div>
+            <div class="p-6 overflow-auto bg-slate-50 relative min-h-[500px] flex justify-center">
+                <div class="mermaid origin-top transition-transform duration-200" id="erd">
+erDiagram
+    users ||--|| user_profiles : has
+    users ||--o{ user_socials : owns
+    users ||--o{ user_consents : agrees
+    users ||--o{ reviews : writes
+    users ||--o{ scan_logs : generates
+    users ||--o{ orders : places
+    users ||--o{ posts : writes
+    users ||--o{ inquiries : submits
+    restaurants ||--o{ reviews : receives
+    restaurants ||--o{ orders : receives
+    posts ||--o{ comments : contains
+    terms ||--o{ user_consents : referenced_by
+
+    users {
+        bigint id PK
+        varchar email
+        varchar role "USER|OWNER|ADMIN"
+        varchar status "ACTIVE|SUSPENDED|WITHDRAWN"
+    }
+    user_profiles {
+        bigint user_id PK "FK"
+        bytea encrypted_health_data "AES-256"
+        varchar language_code
+    }
+    user_socials {
+        bigint id PK
+        varchar provider "google|apple|naver|kakao"
+        varchar provider_id
+    }
+    user_consents {
+        bigint id PK
+        bigint terms_id FK
+        boolean agreed
+    }
+    restaurants {
+        bigint id PK
+        varchar name
+        double lat
+        double lng
+        jsonb menu_json
+        jsonb attributes
+    }
+    reviews {
+        bigint id PK
+        int rating
+        text content
+    }
+    scan_logs {
+        bigint id PK
+        varchar scan_type "MENU|BARCODE"
+        boolean warning_flag
+    }
+    orders {
+        bigint id PK
+        jsonb menu_details
+        varchar status
+    }
+    posts {
+        bigint id PK
+        varchar title
+        int likes
+    }
+    comments {
+        bigint id PK
+        text content
+    }
+    inquiries {
+        bigint id PK
+        varchar type
+        varchar status
+    }
+    terms {
+        bigint id PK
+        int version
+        boolean required
+    }
+                </div>
+            </div>
+        </section>
+
+        <!-- 테이블 정의서 -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200"><h2 class="font-bold text-slate-800">📋 테이블 정의서 (요약)</h2></div>
+            <div class="p-6 overflow-x-auto">
+                <table class="table-auto w-full text-sm border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-600 text-left">
+                            <th class="p-3 font-semibold">Table</th>
+                            <th class="p-3 font-semibold">대표 컬럼</th>
+                            <th class="p-3 font-semibold">설명</th>
+                            <th class="p-3 font-semibold">연관 기능</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-mono text-teal-700">users</td><td class="p-3">role, status</td><td class="p-3">통합 회원(관광객/점주/관리자)</td><td class="p-3 text-xs text-slate-500">FEAT-AUTH-02, ADMIN-04</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-mono text-teal-700">user_profiles</td><td class="p-3">encrypted_health_data</td><td class="p-3">건강/식이 프로필(AES-256)</td><td class="p-3 text-xs text-slate-500">FEAT-AUTH-01</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-mono text-teal-700">user_socials</td><td class="p-3">provider</td><td class="p-3">소셜 로그인 매핑(4종)</td><td class="p-3 text-xs text-slate-500">FEAT-AUTH-03</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-mono text-teal-700">restaurants</td><td class="p-3">menu_json, attributes</td><td class="p-3">식당·메뉴·무장애/비건/할랄 속성</td><td class="p-3 text-xs text-slate-500">FEAT-TOUR-01</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-mono text-teal-700">scan_logs</td><td class="p-3">scan_type, warning_flag</td><td class="p-3">메뉴판·바코드 스캔 이력(AI 재학습)</td><td class="p-3 text-xs text-slate-500">FEAT-AI-01/02, ADMIN-02</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-mono text-teal-700">orders</td><td class="p-3">menu_details</td><td class="p-3">스마트 오더</td><td class="p-3 text-xs text-slate-500">FEAT-ORDER-01</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-mono text-teal-700">posts · comments</td><td class="p-3">-</td><td class="p-3">커뮤니티 게시판</td><td class="p-3 text-xs text-slate-500">FEAT-CS-01</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-mono text-teal-700">inquiries</td><td class="p-3">type, status</td><td class="p-3">1:1 문의</td><td class="p-3 text-xs text-slate-500">FEAT-CS-02, ADMIN-03</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-mono text-teal-700">user_consents · terms</td><td class="p-3">agreed, version</td><td class="p-3">개인정보 동의 이력(GDPR)</td><td class="p-3 text-xs text-slate-500">FEAT-CS-03</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-mono text-slate-500">admin_stats · common_codes</td><td class="p-3">metrics, group_code</td><td class="p-3">통계 집계 · 동적 공통 코드</td><td class="p-3 text-xs text-slate-500">FEAT-ADMIN-01/05</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-mono text-slate-500">app_versions · i18n_messages · campaign_banners</td><td class="p-3">-</td><td class="p-3">마스터/다국어/배너 관리</td><td class="p-3 text-xs text-slate-500">FEAT-ADMIN-05/06</td></tr>
+                    </tbody>
+                </table>
+                <p class="text-xs text-slate-400 mt-4">※ Redis(비영속): qr_tokens(QR 임시 토큰), JWT 블랙리스트, 일간 통계 캐시 — ERD 제외.</p>
+            </div>
+        </section>
+    </div>
+    <script>
+        const zoomLevels = {};
+        function zoom(id, factor) {
+            if(!zoomLevels[id]) zoomLevels[id] = 1;
+            zoomLevels[id] *= factor;
+            const el = document.getElementById(id);
+            if (el) el.style.transform = `scale(${zoomLevels[id]})`;
+        }
+        function resetZoom(id) {
+            zoomLevels[id] = 1;
+            const el = document.getElementById(id);
+            if (el) el.style.transform = `scale(1)`;
+        }
+    </script>
+</body>
+</html>

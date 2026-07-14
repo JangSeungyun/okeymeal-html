@@ -1,8 +1,9 @@
 ---
 title: AI 에이전트 협업 가이드 (OkeyMeal)
-version: v2.0.0
-last_updated: 2026-07-08
+version: v2.2.0
+last_updated: 2026-07-14
 author: 숭늉
+status: Approved
 ---
 
 # 📘 AI 에이전트 협업 가이드 (OkeyMeal)
@@ -44,13 +45,14 @@ author: 숭늉
 
 ### 🚀 핵심 기능 (Core Features)
 -   **Epic 1. 안심 식당 탐색 & 산책 코스 연계:** 한국관광공사 API 기반 필터링 검색 및 식후 혈당 관리에 좋은 주변 산책 코스 연계 추천.
--   **Epic 2. AI 렌즈 (메뉴판 스캐너):** Cloud Vision OCR 및 Gemini 연동을 통해 메뉴의 위험 성분(고당류, 알레르겐 등) 분석 및 경고.
+-   **Epic 2. AI 렌즈 (메뉴판 스캐너):** Naver Clova OCR 및 HyperCLOVA X(Spring AI) 연동을 통해 메뉴의 위험 성분(고당류, 알레르겐 등) 분석 및 경고.
 -   **Epic 3. SOS 대응 (비상 상황):** 응급 상황 시 위치 기반 주변 의료기관 안내 및 다국어 구조 요청 기능.
 
 ### 🛠 기술 스택 (Tech Stack)
--   **Frontend:** React 18, Vite 6, FSD Architecture, Zustand, Tailwind CSS.
--   **Backend:** Spring Boot 3.4.x (Java 21), PostgreSQL 16.x, JWT.
--   **AI/Infra:** Google Gemini, Cloud Vision, Docker, GitHub Actions.
+> **SSOT**: 기술 스택의 정본은 [`02.Planning_Design/Architecture.md`](./02.Planning_Design/Architecture.md)이며, 아래는 그 요약이다. 변경 시 Architecture.md를 먼저 갱신하고 본 요약을 미러링한다.
+-   **Frontend:** React 19.2.x, Vite, FSD Architecture, Zustand + React Query, **Vanilla CSS Modules**.
+-   **Backend:** Spring Boot 4.1.x (OpenJDK 25), PostgreSQL (JSONB·PostGIS) + Redis, Spring Data JPA, Virtual Threads, JWT.
+-   **AI/Infra:** **Naver Clova OCR + Naver HyperCLOVA X (Spring AI)**, Docker, GitHub Actions.
 
 ---
 
@@ -77,3 +79,4 @@ author: 숭늉
 | v1.1.0 | 2026-04-23 | 파일명 및 범용 AI 에이전트 기준 수정 | 숭늉 |
 | v2.0.0 | 2026-07-08 | 2026 관광데이터 공모전 과제 5번 타겟 및 기능 추가 (만성질환자, 산책 코스) | 숭늉 |
 | v2.1.0 | 2026-07-08 | AI 세션 분리 및 인수인계(Handover Document) 기법 규칙 추가 | 숭늉 |
+| v2.2.0 | 2026-07-14 | **기술 스택 정정** — Architecture.md v2.0.0 확정 기준으로 §2.3·Epic 2 동기화 (Google Gemini·Cloud Vision → Naver Clova OCR·HyperCLOVA X, React 18→19, Java 21→25, Tailwind→Vanilla CSS Modules). frontmatter 버전 v2.0.0→v2.2.0 정합 | 숭늉 |

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>UI/UX Flow - OkeyMeal</title>
+    <script src="../../../assets/js/tailwindcss.js"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#f0fdfa', primaryTextColor: '#0f766e', primaryBorderColor: '#0d9488', lineColor: '#94a3b8' }});
+    </script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-5xl mx-auto space-y-8">
+        <header class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex justify-between items-start">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">🧭 화면 설계 및 유저 플로우 (UI/UX Flow)</h1>
+                <p class="text-slate-500 text-sm mt-1">B2C 관광객 앱 중심 화면 흐름 · 화면별 API 트리거</p>
+            </div>
+            <div class="text-right shrink-0">
+                <span class="inline-block bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full font-medium">v0.1.0 · Draft</span>
+                <p class="text-xs text-slate-400 mt-1">2026-07-14</p>
+            </div>
+        </header>
+
+        <!-- 전체 화면 흐름도 -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                <h2 class="font-bold text-slate-800">전체 화면 흐름도 (B2C)</h2>
+                <div class="flex gap-2">
+                    <button onclick="zoom('flow', 1.2)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➕ 확대</button>
+                    <button onclick="zoom('flow', 0.8)" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">➖ 축소</button>
+                    <button onclick="resetZoom('flow')" class="px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-xs hover:bg-slate-50 shadow-sm">🔄 원래대로</button>
+                </div>
+            </div>
+            <div class="p-6 overflow-auto bg-slate-50 relative min-h-[500px] flex justify-center">
+                <div class="mermaid origin-top transition-transform duration-200" id="flow">
+stateDiagram-v2
+    [*] --> Splash
+    Splash --> Onboarding : 최초 실행
+    Splash --> Home : 세션 유효
+    Onboarding --> Login
+    Login --> Home : 소셜/일반/Guest
+
+    Home --> RestaurantSearch : 안심 식당 탐색
+    Home --> AiLens : AI 렌즈 스캔
+    Home --> BarcodeScan : 바코드 판별
+    Home --> Community : 커뮤니티
+    Home --> SOS : 응급 SOS
+
+    RestaurantSearch --> RestaurantDetail
+    RestaurantDetail --> AiLens : 메뉴판 스캔
+    AiLens --> ScanResult : OCR+성분분석
+    ScanResult --> OrderQR : 안전 메뉴 주문
+    ScanResult --> AiLens : 위험 → 재스캔
+    OrderQR --> WalkCourse : 식후 추천
+    WalkCourse --> [*]
+    SOS --> [*]
+                </div>
+            </div>
+        </section>
+
+        <!-- 화면별 요구사항 -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200"><h2 class="font-bold text-slate-800">📋 화면별 상세 요구사항</h2></div>
+            <div class="p-6 overflow-x-auto">
+                <table class="table-auto w-full text-sm border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-600 text-left">
+                            <th class="p-3 font-semibold">화면</th>
+                            <th class="p-3 font-semibold">주요 UI 요소</th>
+                            <th class="p-3 font-semibold">API 트리거</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-semibold text-slate-700">Onboarding</td><td class="p-3">21종 알레르기/질환 체크리스트, 언어 설정</td><td class="p-3 font-mono text-xs text-teal-700">POST /auth/profile</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-semibold text-slate-700">RestaurantSearch</td><td class="p-3">지도(PostGIS 5km), 위험도 라벨(적/황/녹), 비건/할랄/무장애 필터</td><td class="p-3 font-mono text-xs text-teal-700">TourAPI, 지자체 API</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-semibold text-slate-700">AiLens</td><td class="p-3">카메라 뷰, 로딩 스켈레톤, AR 오버레이(적색), 3초 Fallback</td><td class="p-3 font-mono text-xs text-teal-700">POST /ai/scan</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-semibold text-slate-700">OrderQR</td><td class="p-3">타이머 동적 QR(HMAC), 안심 뱃지</td><td class="p-3 font-mono text-xs text-teal-700">GET /order/view/{token}</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-semibold text-slate-700">WalkCourse</td><td class="p-3">반경 2km 걷기 코스/명소, 내비 연동</td><td class="p-3 font-mono text-xs text-teal-700">TourAPI, Google Maps</td></tr>
+                        <tr class="hover:bg-slate-50"><td class="p-3 font-semibold text-slate-700">SOS</td><td class="p-3">최단거리 응급실/심야약국, 다국어 헬프카드, TTS</td><td class="p-3 font-mono text-xs text-teal-700">보건복지부 응급의료 API</td></tr>
+                    </tbody>
+                </table>
+                <p class="text-xs text-slate-400 mt-4">※ B2B(점주 QR 뷰어)·B2A(관리자 대시보드) 플로우는 추후 보강 예정.</p>
+            </div>
+        </section>
+    </div>
+    <script>
+        const zoomLevels = {};
+        function zoom(id, factor) {
+            if(!zoomLevels[id]) zoomLevels[id] = 1;
+            zoomLevels[id] *= factor;
+            const el = document.getElementById(id);
+            if (el) el.style.transform = `scale(${zoomLevels[id]})`;
+        }
+        function resetZoom(id) {
+            zoomLevels[id] = 1;
+            const el = document.getElementById(id);
+            if (el) el.style.transform = `scale(1)`;
+        }
+    </script>
+</body>
+</html>

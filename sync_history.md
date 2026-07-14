@@ -17,3 +17,6 @@
 ### Sync: 2026-07-13 10:31:37
 - **Original Repo Commit**: [aad8aba] docs: restructure document architecture for 2026 tourism contest task 5 (2026-07-08)
 
+### Sync: 2026-07-14 13:25:11
+- **Original Repo Commit**: [3afb78b] docs: 문서 정합성 정정 및 신규 설계문서·시각화 추가 (2026-07-14)
+

@@ -4,20 +4,24 @@
 
 ## 📄 작성 필수 문서 지정
 
-1.  **`Core_Features.md` (상세 기능 정의서)**
-    *   식이 프로필 기반 필터링, AI 렌즈(OCR) 성분 분석 경고, 식후 산책 코스 추천 등 기능 명세.
-2.  **`System_Architecture.md` (시스템 아키텍처 설계서)**
+> **파일명 정합 안내 (2026-07-14)**: 실제 산출물 파일명은 아래를 정본으로 한다. 과거 가이드의 `Core_Features.md`·`System_Architecture.md` 표기는 각각 `Feature_List.md`·`Architecture.md`로 대체되었다.
+
+1.  **`Requirements.md` (요구사항 정의서)** ✅ 작성 완료
+    *   B2C/B2B/B2A 기능 요구사항 및 비기능 요구사항(NFR) 명세.
+2.  **`Feature_List.md` (기능 목록 명세서, 구 Core_Features)** ✅ 작성 완료
+    *   식이 프로필 기반 필터링, AI 렌즈(OCR) 성분 분석 경고, 식후 산책 코스 추천 등 모듈별 구현 단위 명세.
+3.  **`Architecture.md` (서비스 구조도, 구 System_Architecture)** ✅ 작성 완료
     *   프론트엔드-백엔드-AI 모델 간의 데이터 흐름도 및 인프라 구조.
-3.  **`DB_Schema.md` (데이터베이스 설계서)**
-    *   사용자 건강/식이 프로필, 식당 정보, 산책로 정보의 ERD.
-4.  **`UI_UX_Flow.md` (화면 설계 및 유저 플로우)**
+4.  **`DB_Schema.md` (데이터베이스 설계서)** 🔄 작성 완료 (v0.1.0 Draft)
+    *   사용자 건강/식이 프로필, 식당 정보, 산책로 정보의 ERD. (Feature_List에 흩어진 테이블 정의를 단일 ERD로 통합)
+5.  **`UI_UX_Flow.md` (화면 설계 및 유저 플로우)** 🔄 작성 완료 (v0.1.0 Draft)
     *   주요 화면 흐름도 및 각 화면별 컴포넌트 요구사항.
 
 ---
 
 ## 📐 문서별 맞춤 템플릿 규칙
 
-### 1. `Core_Features.md`
+### 1. `Feature_List.md` (구 Core_Features)
 ```markdown
 ## [기능명] (예: AI 렌즈 성분 경고)
 - **User Story**: "기저질환자로서, 메뉴판을 스캔하여 위험 성분이 있는지 알고 싶다."
@@ -25,7 +29,7 @@
 - **연관 데이터**: 활용되는 OpenAPI 또는 자체 DB 명시
 ```
 
-### 2. `System_Architecture.md`
+### 2. `Architecture.md` (구 System_Architecture)
 ```markdown
 ## 시스템 구성도
 - [Mermaid Architecture Diagram 필수 삽입]

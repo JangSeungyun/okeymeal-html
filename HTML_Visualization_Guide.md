@@ -1,8 +1,9 @@
 ---
 title: HTML 시각화 공통 가이드 (HTML_Visualization_Guide)
-version: v1.1.0
+version: v1.2.0
 last_updated: 2026-07-08
 author: 숭늉
+status: Approved
 ---
 
 # 🎨 HTML 시각화 공통 가이드
